@@ -1,0 +1,384 @@
+/********************************************
+   	AUTHOR:  			Nuwan Silva
+   	WEBSITE:   			http://www.lankantraveler.info
+	TEMPLATE NAME: 		nu1silva commons
+   	TEMPLATE CODE: 		N1S-COM-CSS
+   	VERSION:          	0.0.1
+ *******************************************/
+
+html, body {
+    background: none repeat scroll 0% 0% rgb(238, 240, 242);
+    /*font-family:"Trebuchet MS" Arial, Helvetica, sans-serif, Calibri;*/
+    font-family: "lucida grande", tahoma, verdana, arial, sans-serif;
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+    color: #000000;
+}
+
+.clearfix {
+    background: none repeat scroll 0% 0% #EEF0F2;
+    width: 900px;
+    height: 20px;
+}
+
+h1, h2, h3, h4, h5 {
+    text-decoration: none;
+    color: #000000;
+}
+
+/* Header */
+#header {
+    /*background:none repeat scroll 0% 0% #EEF0F2;*/
+    background: none repeat scroll 0% 0% #FFFFFF;
+    padding-top: 10px;
+    margin: 0 auto;
+    min-height: 100px;
+    position: relative;
+    width: 900px;
+}
+
+#header-options {
+    background: none repeat scroll 0% 0% #ffffff;
+    box-shadow: 0pt 1px 2px rgba(0, 0, 0, 0.5);
+    border-radius: 5px 5px 5px 5px;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 300px;
+    height: 20px;
+}
+
+#header-options-content {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    padding: 3px 5px 1px 5px;
+}
+
+#header-options-logout {
+    background: none #000000;
+    border-radius: 5px 5px 5px 5px;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 75px;
+    height: 20px;
+}
+
+#header-options-logout-text {
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    font-size: 11px;
+    padding: 3px 0px 0px 15px;
+    color: #ffffff;
+}
+
+/* Container */
+#container {
+    background: #FFFFFF;
+    margin: 0 auto;
+    width: 900px;
+}
+
+#content {
+    background: none repeat scroll 0% 0% #FFFFFF;
+    box-shadow: 0pt 1px 0px rgba(0, 0, 0, 0.5);
+    border-radius: 5px 5px 5px 5px;
+    min-height: 200px;
+    width: 900px;
+    overflow: auto;
+    padding-bottom: 30px;
+}
+
+#main_content {
+    padding: 10px 10px 10px 30px;
+    float: left;
+    width: 580px;
+}
+
+#reporting_container {
+    background: #FFFFFF;
+    margin: 0 auto;
+    width: 550px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+#summary_content {
+    float: left;
+    width: 250px;
+}
+
+#data_summary {
+    background: #FFFFFFF;
+    box-shadow: 0pt 1px 2px rgba(0.2, 0, 0, 0.5);
+    border-radius: 5px 5px 5px 5px;
+    margin: 0 auto;
+    height: 300px;
+    position: relative;
+    width: 200px;
+    padding: 10px 20px 10px 20px;
+    text-align: center;
+}
+
+/* Form contents
+******************************************************/
+#form_content {
+    text-align: center;
+}
+
+#form_left {
+    float: left;
+    width: 250px;
+    text-align: right;
+}
+
+#form_right {
+    float: left;
+    width: 200px;
+    text-align: left;
+    padding-left: 30px;
+}
+
+/* top menu */
+#top_menu {
+    background: -moz-linear-gradient(rgb(78, 81, 82), rgb(54, 54, 54)) repeat scroll 0% 0% rgb(54, 54, 54);
+    background: #363636;
+    box-shadow: 0pt 1px 2px rgba(0, 0, 0, 0.5);
+    border-radius: 5px 5px 5px 5px;
+    margin: 0 auto;
+    height: 30px;
+    position: relative;
+    width: 900px;
+}
+
+#nav {
+    width: 100%;
+    float: left;
+    margin: 0 0 3em 0;
+    padding: 0;
+    list-style: none;
+}
+
+#nav li {
+    float: left;
+}
+
+#nav li a {
+    display: block;
+    padding: 10px 15px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 11px;
+    font-family: Arial, "MS Trebuchet", sans-serif;
+    color: #FFFFFF;
+}
+
+#nav li a:hover {
+    color: #C0C0C0;
+}
+
+/*	Login
+----------------------------------------------------*/
+#login-panel {
+    font-family: Arial, Helvetica, sans-serif;
+    background: -moz-linear-gradient(rgb(78, 81, 82), rgb(54, 54, 54)) repeat scroll 0% 0% rgb(54, 54, 54);
+    box-shadow: 0pt 1px 2px rgba(0, 0, 0, 0.5);
+    border-radius: 10px 10px 5px 5px;
+    margin: 10pt auto;
+    height: 300px;
+    float: center;
+    width: 300px;
+}
+
+#login-panel-top {
+    background: none #000000;
+    border-radius: 10px 10px 10px 10px;
+    margin: 10pt auto;
+    height: 50px;
+    float: center;
+    top: 100px;
+    width: 300px;
+}
+
+#login-panel-top-font {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 28px;
+    padding-top: 10px;
+    text-align: center;
+    color: #ffffff;
+}
+
+#login-copyrights {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    text-align: center;
+}
+
+#login {
+    float: center;
+}
+
+#inputs, #actions {
+    border: 0px;
+}
+
+#username, #password {
+    width: 275px;
+    height: 30px;
+    border-radius: 5px 5px 5px 5px;
+    text-align: center;
+    margin: 10px auto;
+}
+
+#login-button {
+    background: none #E8E9EB;
+    border-radius: 5px 5px 5px 5px;
+    height: 35px;
+    width: 120px;
+}
+
+#login-panel-other-options {
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: right;
+    padding: 25px 20px 0px 0px;
+}
+
+#login-panel-other-options a:link {
+    font-size: 12px;
+    color: #FFFFFF;
+}
+
+#login-panel-other-options a:hover {
+    color: #FFFFFF;
+    font-weight: bold;
+    box-shadow: 0pt 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Footer */
+#footer {
+    background: -moz-linear-gradient(rgb(78, 81, 82), rgb(54, 54, 54)) repeat scroll 0% 0% rgb(54, 54, 54);
+    background: #363636;
+    box-shadow: 0pt 1px 2px rgba(0, 0, 0, 0.5);
+    border-radius: 5px 5px 5px 5px;
+    margin: 0 auto;
+    height: 50px;
+    position: relative;
+    width: 900px;
+    bottom: 0px;
+}
+
+#footer-content {
+    font-size: 10px;
+    text-align: center;
+}
+
+#footer-logo {
+    background: none repeat scroll 0% 0% #ffffff;
+    box-shadow: 0pt 1px 2px rgba(0, 0, 0, 0.5);
+    border-radius: 5px 5px 5px 5px;
+    width: 200px;
+    height: 20px;
+}
+
+#footer-socialmedia-icons {
+    background: none repeat scroll 0% 0% #ffffff;
+    box-shadow: 0pt 1px 2px rgba(0, 0, 0, 0.5);
+    border-radius: 5px 5px 5px 5px;
+    width: 150px;
+    height: 20px;
+}
+
+#foot_left {
+    padding: 10px 10px 10px 10px;
+    float: left;
+    width: 200px;
+}
+
+#foot_center {
+    padding: 10px 10px 10px 10px;
+    float: left;
+    width: 400px;
+}
+
+#foot_right {
+    padding: 10px 10px 10px 10px;
+    float: right;
+    width: 200px;
+}
+
+/* sdmenu */
+div.sdmenu {
+    width: 175px;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    padding: 10px 0px 10px 20px;
+    background: url(../images/temp.gif) no-repeat right bottom;
+    color: #fff;
+}
+
+div.sdmenu div {
+    background: url(../images/title.gif) repeat-x;
+    overflow: hidden;
+}
+
+div.sdmenu div {
+    background: url(../images/title.gif) repeat-x;
+    overflow: hidden;
+}
+
+div.sdmenu div:first-child {
+    background: url(../images/toptitle.gif) no-repeat;
+}
+
+div.sdmenu div.collapsed {
+    height: 25px;
+}
+
+div.sdmenu div span {
+    display: block;
+    padding: 5px 25px;
+    font-weight: bold;
+    color: white;
+    background: url(../images/expanded.gif) no-repeat 10px center;
+    cursor: default;
+    border-bottom: 1px solid #ddd;
+}
+
+div.sdmenu div.collapsed span {
+    background-image: url(../images/collapsed.gif);
+}
+
+div.sdmenu div a {
+    padding: 5px 10px;
+    background: #eee;
+    display: block;
+    border-bottom: 1px solid #ddd;
+    color: #006400;
+}
+
+div.sdmenu div a.current {
+    /*background : #ccc;*/
+}
+
+div.sdmenu div a:hover {
+    background: #696969 url(../images/linkarrow.gif) no-repeat right center;
+    color: #fff;
+    text-decoration: none;
+}
+
+top-bar {
+    background: url(../images/title.gif) repeat-x;
+    border-radius: 5px 5px 0px 0px;
+}
+
+#error_msg {
+    color: #FF0000;
+    font-size: 14px;
+}
