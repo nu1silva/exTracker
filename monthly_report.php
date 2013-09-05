@@ -24,8 +24,8 @@ if (count($monthlyArray) >= 1) {
         $monthlySumArray[] = $amt;
 
         $piChartM = new gPieChart();
-        $piChartM->addDataSet(array($monthlySumArray[0], $monthlySumArray[1], $monthlySumArray[2], $monthlySumArray[3], $monthlySumArray[4]));
-        $piChartM->setLabels(array($monthlyCatArray[0], $monthlyCatArray[1], $monthlyCatArray[2], $monthlyCatArray[3], $monthlyCatArray[4]));
+        $piChartM->addDataSet(array($monthlySumArray[0], $monthlySumArray[1], $monthlySumArray[2], $monthlySumArray[3], $monthlySumArray[4], $monthlySumArray[5], $monthlySumArray[6], $monthlySumArray[7], $monthlySumArray[8], $monthlySumArray[9], $monthlySumArray[10], $monthlySumArray[11], $monthlySumArray[12], $monthlySumArray[13], $monthlySumArray[14], $monthlySumArray[15]));
+        $piChartM->setLabels(array($monthlyCatArray[0], $monthlyCatArray[1], $monthlyCatArray[2], $monthlyCatArray[3], $monthlyCatArray[4], $monthlyCatArray[5], $monthlyCatArray[6], $monthlyCatArray[7], $monthlyCatArray[8], $monthlyCatArray[9], $monthlyCatArray[10], $monthlyCatArray[11], $monthlyCatArray[12], $monthlyCatArray[13], $monthlyCatArray[14], $monthlyCatArray[15]));
         $piChartM->setColors(array("C50000", "1000C5", "14C500", "C5AE00", "AB00C5", "04B7B1", "B75504", "FF00EF", "00FFE6", "9EFF00", "FF5100", "0000FF", "CCOOOO", "C50000", "1000C5", "14C500", "C5AE00", "AB00C5", "04B7B1", "B75504", "FF00EF", "00FFE6", "9EFF00", "FF5100", "0000FF", "CCOOOO"));
     }
 }

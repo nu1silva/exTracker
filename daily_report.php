@@ -25,8 +25,8 @@ if (count($dailyArray) >= 1) {
         $dailySumArray[] = $amt;
 
         $piChartd = new gPieChart();
-        $piChartd->addDataSet(array($dailySumArray[0], $dailySumArray[1], $dailySumArray[2], $dailySumArray[3], $dailySumArray[4]));
-        $piChartd->setLabels(array($dailyCatArray[0], $dailyCatArray[1], $dailyCatArray[2], $dailyCatArray[3], $dailyCatArray[4]));
+        $piChartd->addDataSet(array($dailySumArray[0], $dailySumArray[1], $dailySumArray[2], $dailySumArray[3], $dailySumArray[4], $dailySumArray[5], $dailySumArray[6], $dailySumArray[7], $dailySumArray[8], $dailySumArray[9], $dailySumArray[10], $dailySumArray[11], $dailySumArray[12], $dailySumArray[13], $dailySumArray[14], $dailySumArray[15]));
+        $piChartd->setLabels(array($dailyCatArray[0], $dailyCatArray[1], $dailyCatArray[2], $dailyCatArray[3], $dailyCatArray[4], $dailyCatArray[5], $dailyCatArray[6], $dailyCatArray[7], $dailyCatArray[8], $dailyCatArray[9], $dailyCatArray[10], $dailyCatArray[11], $dailyCatArray[12], $dailyCatArray[13], $dailyCatArray[14], $dailyCatArray[15]));
         $piChartd->setColors(array("C50000", "1000C5", "14C500", "C5AE00", "AB00C5", "04B7B1", "B75504", "FF00EF", "00FFE6", "9EFF00", "FF5100", "0000FF", "CCOOOO", "C50000", "1000C5", "14C500", "C5AE00", "AB00C5", "04B7B1", "B75504", "FF00EF", "00FFE6", "9EFF00", "FF5100", "0000FF", "CCOOOO"));
     }
 }
