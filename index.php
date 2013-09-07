@@ -29,7 +29,7 @@ $piChartd->setColors(array("363636", "11ff11", "22aacc", "3333aa", "C0C0C0"));
             <div style="text-align: center">
                 <h2>exTracker Dashboard</h2>
 
-                <div style="width: 580px; margin-top: 70px" class="ui-widget-content ui-corner-all">
+                <!--<div style="width: 580px; margin-top: 70px" class="ui-widget-content ui-corner-all">
                     <h3 style="padding: 5px; margin-top: 0; text-align: left; padding-left: 30px;"
                         class="ui-widget-header ui-corner-all">Expense Trends - August</h3>
                     <img src="<?php print $piChartd->getUrl(); ?>"/>
@@ -40,7 +40,7 @@ $piChartd->setColors(array("363636", "11ff11", "22aacc", "3333aa", "C0C0C0"));
                         class="ui-widget-header ui-corner-all">Expense Trends - 2013</h3>
                     <img src="<?php print $piChartd->getUrl(); ?>"/>
                     </p>
-                </div>
+                </div>-->
             </div>
         </div>
         <div id="summary_content">

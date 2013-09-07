@@ -30,8 +30,8 @@ function updateDayaccount($db, $amount, $year, $month, $day)
 
 
     if (mysqli_num_rows($dayTot) == 0) {
-        $fulld = $year . '-' . $month . '-' . $day;
-        $insertDay = "INSERT INTO summary_day VALUES ($year, $month, $day, 0, " . $fulld . ")";
+        //$fulld = $year . '-' . $month . '-' . $day;
+        $insertDay = "INSERT INTO summary_day VALUES ($year, $month, $day, 0)";
         mysqli_query($db, $insertDay);
     }
 

@@ -113,7 +113,7 @@ $page_rows = 10;
     <table width='300px' border='0' cellpadding='5' cellspacing='0'>
         <tr>
             <td style="text-align:right;"><label>Description :</label></td>
-            <td style="text-align:left;"><input id="desc" name="desc" type="text"></td>
+            <td style="text-align:left;"><input id="desc" name="desc" type="text" style="width: 175px; height: 20px"></td>
         </tr>
         <tr>
             <td style="text-align:right;"><label>Category :</label></td>
@@ -136,7 +136,7 @@ $page_rows = 10;
         </tr>
         <tr>
             <td style="text-align:right;"><label>Amount :</label></td>
-            <td style="text-align:left;"><input id="aamount" name="aamount" type="text"></td>
+            <td style="text-align:left;"><input id="aamount" name="aamount" type="text" style="width: 175px; height: 20px"></td>
         </tr>
         <tr>
             <td></td>

@@ -3,7 +3,7 @@
 include_once("configs.php");
 include_once("plugins/KLogger.php");
 
-$log = new KLogger ("/var/www/extracker/logs/", KLogger::DEBUG);
+$log = new KLogger ("/public_html/extracker/logs/", KLogger::DEBUG);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -11,9 +11,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $myusername = addslashes($_POST['username']);
     $mypassword = addslashes($_POST['password']);
 
-    $encrypt_password = md5($mypassword);
-    $encrypt_password = stripslashes($encrypt_password);
-    $encrypt_password = mysql_real_escape_string($encrypt_password);
+    $encrypt_password1 = md5($mypassword);
+    $encrypt_password = stripslashes($encrypt_password1);
 
     $sql = "SELECT id,status FROM user_accounts WHERE username='$myusername' and password='$encrypt_password'";
     $result = mysqli_query($db, $sql);
