@@ -1,5 +1,5 @@
 <?php
-$mysql_hostname = "127.6.63.2";
+$mysql_hostname = "extracker-nu1silva.rhcloud.com";
 $mysql_user = "adminnhVut3p";
 $mysql_password = "xXtma-A9byS1";
 $mysql_database = "extracker";
