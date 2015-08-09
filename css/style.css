@@ -100,10 +100,16 @@ h1, h2, h3, h4, h5 {
 }
 
 #content_install {
-    padding: 30px 10px 10px 30px;
+    padding: 30px 30px 30px 30px;
     float: left;
     font-family: "lucida grande", tahoma, verdana, arial, sans-serif;
     font-size: 14px;
+}
+
+#content_install_buttons {
+    padding: 30px 30px 30px 30px;
+    float: right;
+    bottom: 0px;
 }
 
 #reporting_container {

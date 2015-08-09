@@ -1,0 +1,85 @@
+/********************************************
+   	AUTHOR:  			Nuwan Silva
+   	WEBSITE:   			http://www.lankantraveler.info
+	TEMPLATE NAME: 		nu1silva commons
+   	TEMPLATE CODE: 		N1S-COM-CSS
+   	VERSION:          	0.0.1
+ *******************************************/
+
+html, body {
+    background: none repeat scroll 0% 0% rgb(238, 240, 242);
+    /*font-family:"Trebuchet MS" Arial, Helvetica, sans-serif, Calibri;*/
+    font-family: "lucida grande", tahoma, verdana, arial, sans-serif;
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, h3, h4, h5 {
+    text-decoration: none;
+    color: #000000;
+}
+
+/* Header */
+#header {
+    /*background:none repeat scroll 0% 0% #EEF0F2;*/
+    background: none repeat scroll 0% 0% #FFFFFF;
+    padding-top: 10px;
+    margin: 0 auto;
+    min-height: 100px;
+    position: relative;
+    width: 900px;
+}
+
+/* Container */
+#container {
+    background: #FFFFFF;
+    margin: 0 auto;
+    width: 900px;
+}
+
+#content {
+    background: none repeat scroll 0% 0% #FFFFFF;
+    box-shadow: 0pt 1px 0px rgba(0, 0, 0, 0.5);
+    min-height: 400px;
+    width: 900px;
+    overflow: auto;
+    padding-bottom: 30px;
+}
+
+#content_install {
+    padding: 30px 30px 30px 30px;
+    float: left;
+    font-family: "lucida grande", tahoma, verdana, arial, sans-serif;
+    font-size: 14px;
+}
+
+#content_install_buttons {
+    padding: 30px 30px 30px 30px;
+    margin: 0 auto;
+}
+
+/* top menu */
+#top_menu {
+    background: -moz-linear-gradient(rgb(78, 81, 82), rgb(54, 54, 54)) repeat scroll 0% 0% rgb(54, 54, 54);
+    background: #363636;
+    box-shadow: 0pt 1px 2px rgba(0, 0, 0, 0.5);
+    border-radius: 5px 5px 5px 5px;
+    margin: 0 auto;
+    height: 30px;
+    position: relative;
+    width: 100%;
+}
+
+/* Footer */
+#footer {
+    background: -moz-linear-gradient(rgb(78, 81, 82), rgb(54, 54, 54)) repeat scroll 0% 0% rgb(54, 54, 54);
+    background: #363636;
+    box-shadow: 0pt 1px 2px rgba(0, 0, 0, 0.5);
+    border-radius: 0px 0px 5px 5px;
+    margin: 0 auto;
+    height: 50px;
+    position: relative;
+    width: 900px;
+    bottom: 0px;
+}
