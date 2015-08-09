@@ -73,8 +73,10 @@ $report_error = $_GET['report_error'];
                     <li><a href="#tabs-1">Daily</a></li>
                     <li><a href="#tabs-2">Monthly</a></li>
                     <li><a href="#tabs-3">Yearly</a></li>
-                    //<li><a href="#tabs-4">General</a></li>
-                    //<li><a href="#tabs-5">Custom</a></li>
+                    //
+                    <li><a href="#tabs-4">General</a></li>
+                    //
+                    <li><a href="#tabs-5">Custom</a></li>
                 </ul>
                 <div id="tabs-1">
                     <? include_once('daily_report.php'); ?>

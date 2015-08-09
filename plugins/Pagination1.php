@@ -1,22 +1,24 @@
 <?php
+
 /* Pagination Class - http://coursesweb.net/php-mysql/ */
+
 class Pagination
 {
     /* EDIT data in this array if you want to paginate content stored in a MySQL table
      Add your data for connecting to MySQL database (MySQL server, user, password, database name) */
-    protected $mysql = array(
+public $table = 'pgtest';
+    public $rowsperpage = 10; // HERE add the mysql table name
+
+    // properties
+    public $txtchr = 800; // number of articles displayed in the page
+    public $txtpieces = 0; // maximum numbers of characters for article (if paginate text-content)
+    public $range = 3; // number of pieces to divide text (if paginate text-content)
+        protected $mysql = array(
         'host' => 'localhost',
         'user' => 'root',
         'pass' => 'password',
         'dbname' => 'database_name'
-    );
-    public $table = 'pgtest'; // HERE add the mysql table name
-
-    // properties
-    public $rowsperpage = 10; // number of articles displayed in the page
-    public $txtchr = 800; // maximum numbers of characters for article (if paginate text-content)
-    public $txtpieces = 0; // number of pieces to divide text (if paginate text-content)
-    public $range = 3; // range number of links around the current
+    ); // range number of links around the current
     protected $conn = false; // will store the mysql connection
     protected $idpage = 0; // the index of the current page
     protected $totalpages = 0; // number of total pages
@@ -32,17 +34,7 @@ class Pagination
     }
 
     // method to set the mysql connection
-    public function setConn()
-    {
-        // if it connects successfully to MySQL database, store the connection in the $conn property
-        if ($conn = new mysqli($this->mysql['host'], $this->mysql['user'], $this->mysql['pass'], $this->mysql['dbname'])) {
-            $sql = "SET NAMES 'utf8'";
-            if ($conn->query($sql)) $this->conn = $conn;
-        }
-        return $this->conn;
-    }
 
-    // Select the rows for the current page from the mysql table. Returns a string with HTML code
     public function getMysqlRows()
     {
         $this->setConn(); // calls the setConn() method to set the MySQL connection
@@ -81,7 +73,20 @@ class Pagination
         return $re_cnt;
     }
 
+    // Select the rows for the current page from the mysql table. Returns a string with HTML code
+
+    public function setConn()
+    {
+        // if it connects successfully to MySQL database, store the connection in the $conn property
+        if ($conn = new mysqli($this->mysql['host'], $this->mysql['user'], $this->mysql['pass'], $this->mysql['dbname'])) {
+            $sql = "SET NAMES 'utf8'";
+            if ($conn->query($sql)) $this->conn = $conn;
+        }
+        return $this->conn;
+    }
+
     // receives an Arry with the content for all pages. Returns the content for the current page
+
     public function getArrRows($arr)
     {
         $startrow = $this->idpage * $this->rowsperpage; // the element from which start to select

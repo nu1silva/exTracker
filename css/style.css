@@ -39,7 +39,7 @@ h1, h2, h3, h4, h5 {
     margin: 0 auto;
     min-height: 100px;
     position: relative;
-    width: 900px;
+    width: 1200px;
 }
 
 #header-options {
@@ -81,15 +81,14 @@ h1, h2, h3, h4, h5 {
 #container {
     background: #FFFFFF;
     margin: 0 auto;
-    width: 900px;
+    width: 1200px;
 }
 
 #content {
     background: none repeat scroll 0% 0% #FFFFFF;
     box-shadow: 0pt 1px 0px rgba(0, 0, 0, 0.5);
-    border-radius: 5px 5px 5px 5px;
-    min-height: 200px;
-    width: 900px;
+    min-height: 400px;
+    width: 1200px;
     overflow: auto;
     padding-bottom: 30px;
 }
@@ -98,6 +97,13 @@ h1, h2, h3, h4, h5 {
     padding: 10px 10px 10px 30px;
     float: left;
     width: 580px;
+}
+
+#content_install {
+    padding: 30px 10px 10px 30px;
+    float: left;
+    font-family: "lucida grande", tahoma, verdana, arial, sans-serif;
+    font-size: 14px;
 }
 
 #reporting_container {
@@ -154,7 +160,7 @@ h1, h2, h3, h4, h5 {
     margin: 0 auto;
     height: 30px;
     position: relative;
-    width: 900px;
+    width: 100%;
 }
 
 #nav {
@@ -265,11 +271,11 @@ h1, h2, h3, h4, h5 {
     background: -moz-linear-gradient(rgb(78, 81, 82), rgb(54, 54, 54)) repeat scroll 0% 0% rgb(54, 54, 54);
     background: #363636;
     box-shadow: 0pt 1px 2px rgba(0, 0, 0, 0.5);
-    border-radius: 5px 5px 5px 5px;
+    border-radius: 0px 0px 5px 5px;
     margin: 0 auto;
     height: 50px;
     position: relative;
-    width: 900px;
+    width: 1200px;
     bottom: 0px;
 }
 

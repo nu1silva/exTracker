@@ -6,11 +6,7 @@
 
 <body>
 <div id="container">
-    <div id="top_menu">
-        <ul id="nav">
-            <li><a href="index.php">Home</a></li>
-        </ul>
-    </div>
+    <div id="top_menu"/>
 </div>
 </body>
 </html>

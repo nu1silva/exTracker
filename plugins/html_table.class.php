@@ -40,7 +40,7 @@ class HTML_Table
     function __construct($id = '', $klass = '', $border = 0, $attr_ar = array())
     {
         // add rows to tbody unless addTSection called
-        $this->cur_section = & $this->tbody_ar[0];
+        $this->cur_section = &$this->tbody_ar[0];
 
         $this->tableStr = "\n<table" . (!empty($id) ? " id=\"$id\"" : '') .
             (!empty($klass) ? " class=\"$klass\"" : '') . $this->addAttribs($attr_ar) .
@@ -51,28 +51,38 @@ class HTML_Table
       each section collects rows
       when a row is added, add it to the current section
     */
+
+    private function addAttribs($attr_ar)
+    {
+        $str = '';
+        foreach ($attr_ar as $key => $val) {
+            $str .= " $key=\"$val\"";
+        }
+        return $str;
+    }
+
     function addTSection($sec, $klass = '', $attr_ar = array())
     {
         switch ($sec) {
             case 'thead':
-                $ref = & $this->thead;
+                $ref = &$this->thead;
                 break;
             case 'tfoot':
-                $ref = & $this->tfoot;
+                $ref = &$this->tfoot;
                 break;
             case 'tbody':
-                $ref = & $this->tbody_ar[count($this->tbody_ar)];
+                $ref = &$this->tbody_ar[count($this->tbody_ar)];
                 break;
 
             default: // tbody
-                $ref = & $this->tbody_ar[count($this->tbody_ar)];
+                $ref = &$this->tbody_ar[count($this->tbody_ar)];
         }
 
         $ref['klass'] = $klass;
         $ref['atts'] = $attr_ar;
         $ref['rows'] = array();
 
-        $this->cur_section = & $ref;
+        $this->cur_section = &$ref;
     }
 
     function addColgroup($span = '', $klass = '', $attr_ar = array())
@@ -84,7 +94,7 @@ class HTML_Table
             'cols' => array()
         );
 
-        $this->colgroups_ar[] = & $group;
+        $this->colgroups_ar[] = &$group;
     }
 
     function addCol($span = '', $klass = '', $attr_ar = array())
@@ -97,10 +107,10 @@ class HTML_Table
 
         // in colgroup?
         if (!empty($this->colgroups_ar)) {
-            $group = & $this->colgroups_ar[count($this->colgroups_ar) - 1];
-            $group['cols'][] = & $col;
+            $group = &$this->colgroups_ar[count($this->colgroups_ar) - 1];
+            $group['cols'][] = &$col;
         } else {
-            $this->cols_ar[] = & $col;
+            $this->cols_ar[] = &$col;
         }
 
     }
@@ -109,15 +119,6 @@ class HTML_Table
     {
         $this->tableStr .= "<caption" . (!empty($klass) ? " class=\"$klass\"" : '') .
             $this->addAttribs($attr_ar) . '>' . $cap . "</caption>\n";
-    }
-
-    private function addAttribs($attr_ar)
-    {
-        $str = '';
-        foreach ($attr_ar as $key => $val) {
-            $str .= " $key=\"$val\"";
-        }
-        return $str;
     }
 
     function addRow($klass = '', $attr_ar = array())
@@ -151,19 +152,8 @@ class HTML_Table
 
         // add to current section's current row's list of cells
         $count = count($this->cur_section['rows']);
-        $curRow = & $this->cur_section['rows'][$count - 1];
-        $curRow['cells'][] = & $cell;
-    }
-
-    private function getRowCells($cells)
-    {
-        $str = '';
-        foreach ($cells as $cell) {
-            $tag = ($cell['type'] == 'data') ? 'td' : 'th';
-            $str .= (!empty($cell['klass']) ? "    <$tag class=\"{$cell['klass']}\"" : "    <$tag") .
-                $this->addAttribs($cell['atts']) . ">" . $cell['data'] . "</$tag>\n";
-        }
-        return $str;
+        $curRow = &$this->cur_section['rows'][$count - 1];
+        $curRow['cells'][] = &$cell;
     }
 
     function display()
@@ -183,7 +173,6 @@ class HTML_Table
         return $this->tableStr;
     }
 
-    // get colgroups/cols
     private function getColgroups()
     {
         $str = '';
@@ -202,6 +191,8 @@ class HTML_Table
 
         return $str;
     }
+
+    // get colgroups/cols
 
     private function getCols($ar)
     {
@@ -229,6 +220,17 @@ class HTML_Table
 
         $str .= "</$tag>\n";
 
+        return $str;
+    }
+
+    private function getRowCells($cells)
+    {
+        $str = '';
+        foreach ($cells as $cell) {
+            $tag = ($cell['type'] == 'data') ? 'td' : 'th';
+            $str .= (!empty($cell['klass']) ? "    <$tag class=\"{$cell['klass']}\"" : "    <$tag") .
+                $this->addAttribs($cell['atts']) . ">" . $cell['data'] . "</$tag>\n";
+        }
         return $str;
     }
 

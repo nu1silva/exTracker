@@ -39,50 +39,55 @@ class utility
 class gChart
 {
     /**
+     * @brief Data set values.
+     * Every array entry is a data set.
+     * @var array
+     */
+    protected $values = Array();
+    /**
      * @brief This variable holds all the chart information.
      * @var array
      */
     private $chart;
-
     /**
      * @brief API server URL
      * @var string
      * @usedby getUrl()
      */
     private $baseUrl = "chart.apis.google.com/chart?";
-
-    /**
-     * @brief Data set values.
-     * Every array entry is a data set.
-     * @var array
-     */
-    protected $values = Array();
-
     /**
      * @brief Widht of the chart
      * @var Integer
      */
     private $width;
-
-    private function setWidth($width)
-    {
-        $this->width = $width;
-    }
-
-    public function getWidth()
-    {
-        return ($this->width);
-    }
-
     /**
      * @brief Height of the chart
      * @var Integer
      */
     private $height;
+    /**
+     * @brief Data precision
+     * Defines the precision of the rounding in textEncodeData(). By default it is 2.
+     */
+    private $precision = 2;
+    /**
+     * @brief Handles the number of items in the dataset.
+     */
+    private $dataCount;
+    /**
+     * @brief Data encoding char
+     * @var char
+     */
+    private $dataEncodingType = 't';
+    /**
+     * @brief Server number processing the chart
+     * @var Integer
+     */
+    private $serverNum;
 
-    private function setHeight($height)
+    public function getWidth()
     {
-        $this->height = $height;
+        return ($this->width);
     }
 
     public function getHeight()
@@ -90,84 +95,9 @@ class gChart
         return ($this->height);
     }
 
-    /**
-     * @brief Data precision
-     * Defines the precision of the rounding in textEncodeData(). By default it is 2.
-     */
-    private $precision = 2;
-
-    public function setPrecision($precision)
-    {
-        $this->precision = $precision;
-    }
-
-    public function getPrecision()
-    {
-        return $this->precision;
-    }
-
-    /**
-     * @brief Handles the number of items in the dataset.
-     */
-    private $dataCount;
-
-    public function setDataCount($dataCount)
-    {
-        if (!isset($this->dataCount))
-            $this->dataCount = $dataCount;
-    }
-
-    public function getDataCount()
-    {
-        return $this->dataCount;
-    }
-
-    /**
-     * @brief Data encoding char
-     * @var char
-     */
-    private $dataEncodingType = 't';
-
     public function setEncodingType($newEncodeType)
     {
         $this->dataEncodingType = $newEncodeType;
-    }
-
-    public function getEncodingType()
-    {
-        return ($this->dataEncodingType);
-    }
-
-    protected function encodeData($data, $separator, $encodigData = '')
-    {
-        if ($encodigData == 's') {
-            $data = $this->simpleEncodeData($data);
-            $separator = '';
-        } else if ($encodigData == 'e') {
-            $data = $this->extendedEncodeData($data);
-            $separator = '';
-        } else if ($encodigData == 't') {
-            $data = $this->textEncodeData($data);
-        }
-        $retStr = $this->separateData($data, $separator, "|");
-        $retStr = trim($retStr, "|");
-        return $retStr;
-    }
-
-    protected function separateData($data, $separator, $datasetSeparator)
-    {
-        $retStr = "";
-        if (!is_array($data))
-            return $data;
-        foreach ($data as $currValue) {
-            if (is_array($currValue))
-                $retStr .= $this->separateData($currValue, $separator, $datasetSeparator);
-            else
-                $retStr .= $currValue . $separator;
-        }
-        $retStr = trim($retStr, $separator);
-        $retStr .= $datasetSeparator;
-        return $retStr;
     }
 
     /**
@@ -199,38 +129,96 @@ class gChart
     }
 
     /**
-     * @brief Encodes the data as Basic Text and Text Format with Custom Scaling.
-     *
-     * This specifies floating point values from 0-100, inclusive, as numbers. If user sets data range,
-     * with setDataRange(), the function will do nothig and Google API will render the inage in those
-     * boundaries.
-     *
-     * @return Array The encoded data array, rounded to the decimal point defined by setPrecision(). By default it is 2.
+     * @brief Sets server number processing the chart.
+     * @param $newServerNum Integer The server number. The function will scale this number to the range 0-9
      */
-    private function textEncodeData($data)
+    public function setServerNumber($newServerNum)
     {
-        if (isset($this->chart['chds'])) {
-            return $data;
-        }
-        $encodedData = array();
-        $max = utility::getMaxOfArray($data);
-        if ($max > 100) {
-            $rate = $max / 100;
-            foreach ($data as $array) {
-                if (is_array($array)) {
-                    $encodedData2 = array();
-                    foreach ($array as $elem) {
-                        array_push($encodedData2, round($elem / $rate, $this->getPrecision()));
-                    }
-                    array_push($encodedData, $encodedData2);
-                } else {
-                    array_push($encodedData, round($array / $rate, $this->getPrecision()));
-                }
-            }
+        $this->serverNum = $newServerNum % 10;
+    }
+
+    /**
+     * @brief Gets a chart property
+     * @param $key String Name of the chart parameter
+     */
+    public function getProperty($key)
+    {
+        if (isset($this->chart[$key]))
+            return ($this->chart[$key]);
+    }
+
+    /**
+     * @brief Sets chart dimensions.
+     *
+     * Sets chart dimension using chs parameter. This checks of $width and $height are
+     * defined because in gFormula 0s are used as default values to let the server
+     * autosize the final png image. If only $hegiht is not 0, then the server will use
+     * this value as the height of the png image and will autosize the width.
+     *
+     * @param $width Integer
+     * @param $height Integer
+     */
+    public function setDimensions($width, $height)
+    {
+        $this->setWidth($width);
+        $this->setHeight($height);
+        if ($width && $height) {
+            $this->setProperty('chs', $width . 'x' . $height);
+        } else if ($height)
+            $this->setProperty('chs', $height);
+    }
+
+    private function setWidth($width)
+    {
+        $this->width = $width;
+    }
+
+    private function setHeight($height)
+    {
+        $this->height = $height;
+    }
+
+    /**
+     * @brief Sets the chart property
+     * @param $key String Name of the chart parameter
+     * @param $value String Value of the chart parameter
+     */
+    public function setProperty($key, $value, $append = false, $dataSetSeparator = '|')
+    {
+        if ($append && isset($this->chart[$key])) {
+            $this->chart[$key] = $this->chart[$key] . $dataSetSeparator . $value;
         } else {
-            $encodedData = $data;
+            $this->chart[$key] = $value;
         }
-        return $encodedData;
+    }
+
+    /**
+     * @brief Sets the colors for element of the chart.
+     *
+     * This is the basic function. The data in the array are interpreted as one color one data set.
+     *
+     * @param $colors Array Specifies colors using a 6-character string of hexadecimal values,
+     *                      plus two optional transparency values, in the format RRGGBB[AA].
+     */
+    public function setColors($colors)
+    {
+        $this->setProperty('chco', $this->encodeData($this->getApplicableLabels($colors), ","));
+    }
+
+    protected function encodeData($data, $separator, $encodigData = '')
+    {
+        if ($encodigData == 's') {
+            $data = $this->simpleEncodeData($data);
+            $separator = '';
+        } else if ($encodigData == 'e') {
+            $data = $this->extendedEncodeData($data);
+            $separator = '';
+        } else if ($encodigData == 't') {
+            $data = $this->textEncodeData($data);
+        }
+        $retStr = $this->separateData($data, $separator, "|");
+        $retStr = trim($retStr, "|");
+        return $retStr;
     }
 
     /**
@@ -343,93 +331,72 @@ class gChart
     }
 
     /**
+     * @brief Encodes the data as Basic Text and Text Format with Custom Scaling.
+     *
+     * This specifies floating point values from 0-100, inclusive, as numbers. If user sets data range,
+     * with setDataRange(), the function will do nothig and Google API will render the inage in those
+     * boundaries.
+     *
+     * @return Array The encoded data array, rounded to the decimal point defined by setPrecision(). By default it is 2.
+     */
+    private function textEncodeData($data)
+    {
+        if (isset($this->chart['chds'])) {
+            return $data;
+        }
+        $encodedData = array();
+        $max = utility::getMaxOfArray($data);
+        if ($max > 100) {
+            $rate = $max / 100;
+            foreach ($data as $array) {
+                if (is_array($array)) {
+                    $encodedData2 = array();
+                    foreach ($array as $elem) {
+                        array_push($encodedData2, round($elem / $rate, $this->getPrecision()));
+                    }
+                    array_push($encodedData, $encodedData2);
+                } else {
+                    array_push($encodedData, round($array / $rate, $this->getPrecision()));
+                }
+            }
+        } else {
+            $encodedData = $data;
+        }
+        return $encodedData;
+    }
+
+    public function getPrecision()
+    {
+        return $this->precision;
+    }
+
+    public function setPrecision($precision)
+    {
+        $this->precision = $precision;
+    }
+
+    protected function separateData($data, $separator, $datasetSeparator)
+    {
+        $retStr = "";
+        if (!is_array($data))
+            return $data;
+        foreach ($data as $currValue) {
+            if (is_array($currValue))
+                $retStr .= $this->separateData($currValue, $separator, $datasetSeparator);
+            else
+                $retStr .= $currValue . $separator;
+        }
+        $retStr = trim($retStr, $separator);
+        $retStr .= $datasetSeparator;
+        return $retStr;
+    }
+
+    /**
      * @brief Returns the applicable labels, based on the number of data sets of the chart.
      */
     public function getApplicableLabels($labels)
     {
         return array_splice($labels, 0, count($this->values));
-    }
-
-    /**
-     * @brief Server number processing the chart
-     * @var Integer
-     */
-    private $serverNum;
-
-    /**
-     * @brief Sets server number processing the chart.
-     * @param $newServerNum Integer The server number. The function will scale this number to the range 0-9
-     */
-    public function setServerNumber($newServerNum)
-    {
-        $this->serverNum = $newServerNum % 10;
-    }
-
-    /**
-     * @brief Returns the server number processing the chart
-     * @return Integer
-     */
-    public function getServerNumber()
-    {
-        return ($this->serverNum);
-    }
-
-    /**
-     * @brief Sets the chart property
-     * @param $key String Name of the chart parameter
-     * @param $value String Value of the chart parameter
-     */
-    public function setProperty($key, $value, $append = false, $dataSetSeparator = '|')
-    {
-        if ($append && isset($this->chart[$key])) {
-            $this->chart[$key] = $this->chart[$key] . $dataSetSeparator . $value;
-        } else {
-            $this->chart[$key] = $value;
-        }
-    }
-
-    /**
-     * @brief Gets a chart property
-     * @param $key String Name of the chart parameter
-     */
-    public function getProperty($key)
-    {
-        if (isset($this->chart[$key]))
-            return ($this->chart[$key]);
-    }
-
-    /**
-     * @brief Sets chart dimensions.
-     *
-     * Sets chart dimension using chs parameter. This checks of $width and $height are
-     * defined because in gFormula 0s are used as default values to let the server
-     * autosize the final png image. If only $hegiht is not 0, then the server will use
-     * this value as the height of the png image and will autosize the width.
-     *
-     * @param $width Integer
-     * @param $height Integer
-     */
-    public function setDimensions($width, $height)
-    {
-        $this->setWidth($width);
-        $this->setHeight($height);
-        if ($width && $height) {
-            $this->setProperty('chs', $width . 'x' . $height);
-        } else if ($height)
-            $this->setProperty('chs', $height);
-    }
-
-    /**
-     * @brief Sets the colors for element of the chart.
-     *
-     * This is the basic function. The data in the array are interpreted as one color one data set.
-     *
-     * @param $colors Array Specifies colors using a 6-character string of hexadecimal values,
-     *                      plus two optional transparency values, in the format RRGGBB[AA].
-     */
-    public function setColors($colors)
-    {
-        $this->setProperty('chco', $this->encodeData($this->getApplicableLabels($colors), ","));
     }
 
     /**
@@ -683,13 +650,16 @@ class gChart
     }
 
     /**
-     * @brief Prepares the Data Set String
+     * @brief Returns the html img code.
+     *
+     * This code is HTML 4.01 strict compliant.
      */
-    protected function setDataSetString()
+    public function getImgCode()
     {
-        if (!empty($this->values)) {
-            $this->setProperty('chd', $this->getEncodingType() . $this->getDataCount() . ':' . $this->encodeData($this->values, ',', $this->getEncodingType()));
-        }
+        $code = '<img src="';
+        $code .= $this->getUrl() . '"';
+        $code .= 'alt="gChartPhp Chart" width=' . $this->width . ' height=' . $this->height . '>';
+        print($code);
     }
 
     /**
@@ -710,16 +680,38 @@ class gChart
     }
 
     /**
-     * @brief Returns the html img code.
-     *
-     * This code is HTML 4.01 strict compliant.
+     * @brief Returns the server number processing the chart
+     * @return Integer
      */
-    public function getImgCode()
+    public function getServerNumber()
     {
-        $code = '<img src="';
-        $code .= $this->getUrl() . '"';
-        $code .= 'alt="gChartPhp Chart" width=' . $this->width . ' height=' . $this->height . '>';
-        print($code);
+        return ($this->serverNum);
+    }
+
+    /**
+     * @brief Prepares the Data Set String
+     */
+    protected function setDataSetString()
+    {
+        if (!empty($this->values)) {
+            $this->setProperty('chd', $this->getEncodingType() . $this->getDataCount() . ':' . $this->encodeData($this->values, ',', $this->getEncodingType()));
+        }
+    }
+
+    public function getEncodingType()
+    {
+        return ($this->dataEncodingType);
+    }
+
+    public function getDataCount()
+    {
+        return $this->dataCount;
+    }
+
+    public function setDataCount($dataCount)
+    {
+        if (!isset($this->dataCount))
+            $this->dataCount = $dataCount;
     }
 
     /**
@@ -759,11 +751,6 @@ class gPieChart extends gChart
         $this->setDimensions($width, $height);
     }
 
-    public function getApplicableLabels($labels)
-    {
-        return array_splice($labels, 0, count($this->values[0]));
-    }
-
     public function set3D($is3d = true, $resize = true)
     {
         if ($is3d) {
@@ -785,6 +772,11 @@ class gPieChart extends gChart
     public function setLabels($labels)
     {
         $this->setProperty('chl', urlencode($this->encodeData($this->getApplicableLabels($labels), "|")));
+    }
+
+    public function getApplicableLabels($labels)
+    {
+        return array_splice($labels, 0, count($this->values[0]));
     }
 
     /**
@@ -862,17 +854,6 @@ class gConcentricPieChart extends gPieChart
     }
 
     /**
-     * @brief Returns the applicable labels for the chart.
-     *
-     * This function counts recursively the numeber of values in the $values array.
-     * @return Array Applicable labels
-     */
-    public function getApplicableLabels($labels)
-    {
-        return array_splice($labels, 0, count($this->values, COUNT_RECURSIVE));
-    }
-
-    /**
      * @brief Adds the legend for Concentric Pie Charts
      *
      * Run an instance of this function for each data set.
@@ -882,6 +863,17 @@ class gConcentricPieChart extends gPieChart
     public function addLegend($labels)
     {
         $this->setProperty('chdl', urlencode($this->encodeData($this->getApplicableLabels($labels), "|")), true);
+    }
+
+    /**
+     * @brief Returns the applicable labels for the chart.
+     *
+     * This function counts recursively the numeber of values in the $values array.
+     * @return Array Applicable labels
+     */
+    public function getApplicableLabels($labels)
+    {
+        return array_splice($labels, 0, count($this->values, COUNT_RECURSIVE));
     }
 }
 
@@ -1171,11 +1163,6 @@ class gMeterChart extends gChart
         $this->setProperty('cht', 'gom');
     }
 
-    public function getApplicableLabels($labels)
-    {
-        return array_splice($labels, 0, count($this->values[0]));
-    }
-
     /**
      * @brief Sets the labels for each arrow
      *
@@ -1184,6 +1171,11 @@ class gMeterChart extends gChart
     public function setLabels($labels)
     {
         $this->setProperty('chl', urlencode($this->encodeData($this->getApplicableLabels($labels), "|")));
+    }
+
+    public function getApplicableLabels($labels)
+    {
+        return array_splice($labels, 0, count($this->values[0]));
     }
 }
 
@@ -1252,16 +1244,6 @@ class gScatterChart extends gChart
     }
 
     /**
-     * @brief Returns the applicable labels
-     *
-     * There is no reason to use this function. Please refer to the documentation to know how to use colors and legend.
-     */
-    public function getApplicableLabels($labels)
-    {
-        return $labels;
-    }
-
-    /**
      * @brief Sets the colors for the chart.
      *
      * It has a different separator than the one in the parent class
@@ -1269,6 +1251,16 @@ class gScatterChart extends gChart
     public function setColors($colors)
     {
         $this->setProperty('chco', $this->encodeData($this->getApplicableLabels($colors), "|"));
+    }
+
+    /**
+     * @brief Returns the applicable labels
+     *
+     * There is no reason to use this function. Please refer to the documentation to know how to use colors and legend.
+     */
+    public function getApplicableLabels($labels)
+    {
+        return $labels;
     }
 }
 

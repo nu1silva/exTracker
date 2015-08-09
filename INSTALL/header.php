@@ -1,5 +1,5 @@
 <?php
-include_once('configs.php');
+include_once('../configs.php');
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -12,7 +12,7 @@ include_once('configs.php');
 
 <body>
 <div id="header">
-    <div style="padding-left: 20px;"><h1>Expense Tracker <?php echo $version ?></h1></div>
+    <div style="padding-left: 20px;"><h1>Expense Tracker <?php echo $version ?> Installer</h1></div>
 </body>
 
 </html>

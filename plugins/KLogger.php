@@ -59,7 +59,26 @@ class KLogger
      * are often the values the developers will test for. So we'll make one up.
      */
     const NO_ARGUMENTS = 'KLogger::NO_ARGUMENTS';
-
+    /**
+     * Default severity of log messages, if not specified
+     * @var integer
+     */
+    private static $_defaultSeverity = self::DEBUG;
+    /**
+     * Valid PHP date() format string for log timestamps
+     * @var string
+     */
+    private static $_dateFormat = 'Y-m-d G:i:s';
+    /**
+     * Octal notation for default permissions of the log file
+     * @var integer
+     */
+    private static $_defaultPermissions = 0777;
+    /**
+     * Array of KLogger instances, part of Singleton pattern
+     * @var array
+     */
+    private static $instances = array();
     /**
      * Current status of the log file
      * @var integer
@@ -85,7 +104,6 @@ class KLogger
      * @var resource
      */
     private $_fileHandle = null;
-
     /**
      * Standard messages produced by the class. Can be modified for il8n
      * @var array
@@ -98,62 +116,10 @@ class KLogger
     );
 
     /**
-     * Default severity of log messages, if not specified
-     * @var integer
-     */
-    private static $_defaultSeverity = self::DEBUG;
-    /**
-     * Valid PHP date() format string for log timestamps
-     * @var string
-     */
-    private static $_dateFormat = 'Y-m-d G:i:s';
-    /**
-     * Octal notation for default permissions of the log file
-     * @var integer
-     */
-    private static $_defaultPermissions = 0777;
-    /**
-     * Array of KLogger instances, part of Singleton pattern
-     * @var array
-     */
-    private static $instances = array();
-
-    /**
-     * Partially implements the Singleton pattern. Each $logDirectory gets one
-     * instance.
-     *
-     * @param string $logDirectory File path to the logging directory
-     * @param integer $severity     One of the pre-defined severity constants
-     * @return KLogger
-     */
-    public static function instance($logDirectory = false, $severity = false)
-    {
-        if ($severity === false) {
-            $severity = self::$_defaultSeverity;
-        }
-
-        if ($logDirectory === false) {
-            if (count(self::$instances) > 0) {
-                return current(self::$instances);
-            } else {
-                $logDirectory = dirname(__FILE__);
-            }
-        }
-
-        if (in_array($logDirectory, self::$instances)) {
-            return self::$instances[$logDirectory];
-        }
-
-        self::$instances[$logDirectory] = new self($logDirectory, $severity);
-
-        return self::$instances[$logDirectory];
-    }
-
-    /**
      * Class constructor
      *
      * @param string $logDirectory File path to the logging directory
-     * @param integer $severity     One of the pre-defined severity constants
+     * @param integer $severity One of the pre-defined severity constants
      * @return void
      */
     public function __construct($logDirectory, $severity)
@@ -190,6 +156,47 @@ class KLogger
     }
 
     /**
+     * Partially implements the Singleton pattern. Each $logDirectory gets one
+     * instance.
+     *
+     * @param string $logDirectory File path to the logging directory
+     * @param integer $severity One of the pre-defined severity constants
+     * @return KLogger
+     */
+    public static function instance($logDirectory = false, $severity = false)
+    {
+        if ($severity === false) {
+            $severity = self::$_defaultSeverity;
+        }
+
+        if ($logDirectory === false) {
+            if (count(self::$instances) > 0) {
+                return current(self::$instances);
+            } else {
+                $logDirectory = dirname(__FILE__);
+            }
+        }
+
+        if (in_array($logDirectory, self::$instances)) {
+            return self::$instances[$logDirectory];
+        }
+
+        self::$instances[$logDirectory] = new self($logDirectory, $severity);
+
+        return self::$instances[$logDirectory];
+    }
+
+    /**
+     * Sets the date format used by all instances of KLogger
+     *
+     * @param string $dateFormat Valid format string for date()
+     */
+    public static function setDateFormat($dateFormat)
+    {
+        self::$_dateFormat = $dateFormat;
+    }
+
+    /**
      * Class destructor
      */
     public function __destruct()
@@ -208,6 +215,73 @@ class KLogger
     public function logDebug($line, $args = self::NO_ARGUMENTS)
     {
         $this->log($line, self::DEBUG);
+    }
+
+    /**
+     * Writes a $line to the log with the given severity
+     *
+     * @param string $line Text to add to the log
+     * @param integer $severity Severity level of log message (use constants)
+     */
+    public function log($line, $severity, $args = self::NO_ARGUMENTS)
+    {
+        if ($this->_severityThreshold >= $severity) {
+            $status = $this->_getTimeLine($severity);
+
+            $line = "$status $line";
+
+            if ($args !== self::NO_ARGUMENTS) {
+                /* Print the passed object value */
+                $line = $line . '; ' . var_export($args, true);
+            }
+
+            $this->writeFreeFormLine($line . PHP_EOL);
+        }
+    }
+
+    private function _getTimeLine($level)
+    {
+        $time = date(self::$_dateFormat);
+
+        switch ($level) {
+            case self::EMERG:
+                return "$time - EMERG -->";
+            case self::ALERT:
+                return "$time - [AUDIT] - ";
+            case self::CRIT:
+                return "$time - CRIT -->";
+            case self::FATAL: # FATAL is an alias of CRIT
+                return "$time - FATAL -->";
+            case self::NOTICE:
+                return "$time - NOTICE -->";
+            case self::INFO:
+                return "$time - [INFO] - ";
+            case self::WARN:
+                return "$time - WARN -->";
+            case self::DEBUG:
+                return "$time - [DEBUG] - ";
+            case self::ERR:
+                return "$time - ERROR -->";
+            default:
+                return "$time - LOG -->";
+        }
+    }
+
+    /**
+     * Writes a line to the log without prepending a status or timestamp
+     *
+     * @param string $line Line to write to the log
+     * @return void
+     */
+    public function writeFreeFormLine($line)
+    {
+        if ($this->_logStatus == self::STATUS_LOG_OPEN
+            && $this->_severityThreshold != self::OFF
+        ) {
+            if (fwrite($this->_fileHandle, $line) === false) {
+                $this->_messageQueue[] = $this->_messages['writefail'];
+            }
+        }
     }
 
     /**
@@ -235,16 +309,6 @@ class KLogger
     public function clearMessages()
     {
         $this->_messageQueue = array();
-    }
-
-    /**
-     * Sets the date format used by all instances of KLogger
-     *
-     * @param string $dateFormat Valid format string for date()
-     */
-    public static function setDateFormat($dateFormat)
-    {
-        self::$_dateFormat = $dateFormat;
     }
 
     /**
@@ -340,72 +404,5 @@ class KLogger
     public function logEmerg($line, $args = self::NO_ARGUMENTS)
     {
         $this->log($line, self::EMERG, $args);
-    }
-
-    /**
-     * Writes a $line to the log with the given severity
-     *
-     * @param string $line     Text to add to the log
-     * @param integer $severity Severity level of log message (use constants)
-     */
-    public function log($line, $severity, $args = self::NO_ARGUMENTS)
-    {
-        if ($this->_severityThreshold >= $severity) {
-            $status = $this->_getTimeLine($severity);
-
-            $line = "$status $line";
-
-            if ($args !== self::NO_ARGUMENTS) {
-                /* Print the passed object value */
-                $line = $line . '; ' . var_export($args, true);
-            }
-
-            $this->writeFreeFormLine($line . PHP_EOL);
-        }
-    }
-
-    /**
-     * Writes a line to the log without prepending a status or timestamp
-     *
-     * @param string $line Line to write to the log
-     * @return void
-     */
-    public function writeFreeFormLine($line)
-    {
-        if ($this->_logStatus == self::STATUS_LOG_OPEN
-            && $this->_severityThreshold != self::OFF
-        ) {
-            if (fwrite($this->_fileHandle, $line) === false) {
-                $this->_messageQueue[] = $this->_messages['writefail'];
-            }
-        }
-    }
-
-    private function _getTimeLine($level)
-    {
-        $time = date(self::$_dateFormat);
-
-        switch ($level) {
-            case self::EMERG:
-                return "$time - EMERG -->";
-            case self::ALERT:
-                return "$time - [AUDIT] - ";
-            case self::CRIT:
-                return "$time - CRIT -->";
-            case self::FATAL: # FATAL is an alias of CRIT
-                return "$time - FATAL -->";
-            case self::NOTICE:
-                return "$time - NOTICE -->";
-            case self::INFO:
-                return "$time - [INFO] - ";
-            case self::WARN:
-                return "$time - WARN -->";
-            case self::DEBUG:
-                return "$time - [DEBUG] - ";
-            case self::ERR:
-                return "$time - ERROR -->";
-            default:
-                return "$time - LOG -->";
-        }
     }
 }

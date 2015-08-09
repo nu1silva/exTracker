@@ -1,11 +1,11 @@
 <?php
-$mysql_hostname = "extracker-nu1silva.rhcloud.com";
-$mysql_user = "adminnhVut3p";
-$mysql_password = "xXtma-A9byS1";
-$mysql_database = "extracker";
+$mysql_hostname = "localhost";
+$mysql_user = "xtracker";
+$mysql_password = "xtracker";
+$mysql_database = "xtracker";
 
 
 $db = mysqli_connect($mysql_hostname, $mysql_user, $mysql_password, $mysql_database);
 
 
-$version = "0.3";
+$version = "0.1";
