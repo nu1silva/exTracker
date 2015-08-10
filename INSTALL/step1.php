@@ -11,7 +11,7 @@
 
     <div id="content">
         <div id="content_install">
-            <h4>Welcome to the exTracker Installer</h4>
+            <h4>Step 1</h4>
 
             <p>
                 Installation details will be listed here...<br/>

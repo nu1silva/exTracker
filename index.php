@@ -1,5 +1,8 @@
 <?php
 //include_once('lock.php');
+if (file_exists(INSTALL)) {
+	header("Location: INSTALL/install.php");
+}
 ?>
 
 <html>
