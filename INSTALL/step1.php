@@ -19,7 +19,8 @@
             </p>
 
             <div id="content_install_buttons">
-                <button id="step1" type="submit" style="width: 200px; height: 30px">Install exTracker</button>
+                <button id="step1_back" onclick="location.href = 'install.php';" type="submit" style="width: 200px; height: 30px">Back</button>
+                <button id="step2" onclick="location.href = 'step2.php'; "type="submit" style="width: 200px; height: 30px">Next</button>
             </div>
         </div>
     </div>

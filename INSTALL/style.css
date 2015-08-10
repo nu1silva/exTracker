@@ -41,23 +41,42 @@ h1, h2, h3, h4, h5 {
 #content {
     background: none repeat scroll 0% 0% #FFFFFF;
     box-shadow: 0pt 1px 0px rgba(0, 0, 0, 0.5);
-    min-height: 400px;
     width: 900px;
     overflow: auto;
     padding-bottom: 30px;
 }
 
-#content_install {
-    padding: 30px 30px 30px 30px;
+#main_content {
+    padding: 10px 10px 10px 30px;
     float: left;
-    font-family: "lucida grande", tahoma, verdana, arial, sans-serif;
-    font-size: 14px;
+    width: 600px;
+    min-height: 100px;
+}
+
+#content_install_instructions {
+    float: left;
+    min-height: 250px;
 }
 
 #content_install_buttons {
-    padding: 30px 30px 30px 30px;
-    margin: 0 auto;
+    float: right;
 }
+
+
+#summary_content {
+    float: left;
+    width: 250px;
+}
+
+#data_summary {
+    margin: 0 auto;
+    height: 300px;
+    position: relative;
+    width: 200px;
+    padding: 50px 20px 10px 20px;
+    text-align: left;
+}
+
 
 /* top menu */
 #top_menu {
