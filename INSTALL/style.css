@@ -54,6 +54,8 @@ h1, h2, h3, h4, h5 {
 }
 
 #content_install_instructions {
+    text-justify: auto;
+    width: 100%;
     float: left;
     min-height: 250px;
 }

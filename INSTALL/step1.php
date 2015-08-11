@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>expense tracker | Home</title>
+    <title>exTracker Installer | Select Language</title>
     <link rel="stylesheet" href="style.css" type="text/css" media="screen"/>
 </head>
 
@@ -10,17 +10,39 @@
     <?php include("menu.php"); ?>
 
     <div id="content">
-        <div id="content_install">
-            <h4>Step 1</h4>
+        <div id="main_content">
+            <h4>Select Language</h4>
 
-            <p>
-                Installation details will be listed here...<br/>
-                TODO
-            </p>
-
+            <div id="content_install_instructions">
+                <p>
+                   Please Select the language of your choice and click "Next".<br/><br/>
+                </p>
+                Language :
+                <select>
+                    <option value="en">English</option>
+                </select>
+            </div>
             <div id="content_install_buttons">
-                <button id="step1_back" onclick="location.href = 'install.php';" type="submit" style="width: 200px; height: 30px">Back</button>
-                <button id="step2" onclick="location.href = 'step2.php'; "type="submit" style="width: 200px; height: 30px">Next</button>
+                <button id="step1_back" onclick="location.href = 'install.php';" type="submit"
+                        style="width: 100px; height: 30px">Back
+                </button>
+                <button id="step2" onclick="location.href = 'step2.php';" type="submit"
+                        style="width: 100px; height: 30px">Next
+                </button>
+            </div>
+        </div>
+        <div id="summary_content">
+            <div id="data_summary">
+                <p>
+                    <b>Introduction</b><br> <br>
+                    <b>Select Language</b><br> <br>
+                    Licence Agreement<br> <br>
+                    Environment Verification<br> <br>
+                    Database Settings<br> <br>
+                    Other Settings<br> <br>
+                    Ready to Install<br> <br>
+                    Completed Installation<br> <br>
+                </p>
             </div>
         </div>
     </div>

@@ -15,13 +15,13 @@
 
             <div id="content_install_instructions">
                 <p>
-                    Installation details will be listed here...<br/>
-                    TODO
+                    This Installer will guide you step by step to install exTracker in your server.<br/><br/><br/>
+                    Please follow the below steps to successfully install exTracker
                 </p>
             </div>
             <div id="content_install_buttons">
                 <button id="step1" onclick="location.href = 'step1.php';" type="submit"
-                        style="width: 200px; height: 30px">Back
+                        style="width: 200px; height: 30px">Install exTracker
                 </button>
             </div>
         </div>
