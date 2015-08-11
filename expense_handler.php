@@ -1,7 +1,7 @@
 <?php
 
 include_once('lock.php');
-include_once('configs.php');
+include_once('config.db.php');
 include_once('date_handler.php');
 include_once('plugins/KLogger.php');
 

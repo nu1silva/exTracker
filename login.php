@@ -1,6 +1,6 @@
 <?php
 
-include_once('configs.php');
+include_once('config.db.php');
 $error = $_GET['error'];
 
 ?>

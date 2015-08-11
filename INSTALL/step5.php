@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>exTracker Installer | Environment Verification</title>
+    <title>exTracker Installer | Other Settings</title>
     <link rel="stylesheet" href="style.css" type="text/css" media="screen"/>
 </head>
 
@@ -11,23 +11,19 @@
 
     <div id="content">
         <div id="main_content">
-            <h4>Environment Verification</h4>
+            <h4>Other Settings</h4>
 
             <div id="content_install_instructions">
                 <p>
-                    Verifying the current server environment<br/><br/>
+                    Other settings such as logging etc.<br/><br/>
                 </p>
-                <b>NO Verification done in this version</b>
-                <p>
-                    System Requirements are as follows (please make sure these are met);<br>
-                    TODO
-                </p>
+                <b>Needs to be configurable</b>
             </div>
             <div id="content_install_buttons">
-                <button id="step3_back" onclick="location.href = 'step2.php';" type="submit"
+                <button id="step5_back" onclick="location.href = 'step4.php';" type="submit"
                         style="width: 100px; height: 30px">Back
                 </button>
-                <button id="step4" onclick="location.href = 'step4.php';" type="submit"
+                <button id="step6" onclick="location.href = 'step6.php';" type="submit"
                         style="width: 100px; height: 30px">Next
                 </button>
             </div>
@@ -39,8 +35,8 @@
                     <b>Select Language</b><br> <br>
                     <b>Licence Agreement</b><br> <br>
                     <b>Environment Verification</b><br> <br>
-                    Database Settings<br> <br>
-                    Other Settings<br> <br>
+                    <b>Database Settings</b><br> <br>
+                    <b>Other Settings</b><br> <br>
                     Ready to Install<br> <br>
                     Completed Installation<br> <br>
                 </p>

@@ -1,6 +1,6 @@
 <?php
 
-include_once("configs.php");
+include_once("config.db.php");
 include_once("plugins/KLogger.php");
 
 $log = new KLogger ("/public_html/extracker/logs/", KLogger::DEBUG);

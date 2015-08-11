@@ -1,6 +1,6 @@
 <?php
 
-include('configs.php');
+include('config.db.php');
 include('dbplugin.php');
 
 if (isset($_GET['delid'])) {

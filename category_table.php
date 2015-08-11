@@ -57,7 +57,7 @@
 <body>
 <?php
 include_once('plugins/html_table.class.php');
-include_once('configs.php');
+include_once('config.db.php');
 include_once('dbplugin.php');
 include_once('plugins/KLogger.php');
 

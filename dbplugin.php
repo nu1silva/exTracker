@@ -1,5 +1,5 @@
 <?php
-include_once('configs.php');
+include_once('config.db.php');
 
 function getCategoryName($db, $catid)
 {
