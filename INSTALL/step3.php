@@ -11,20 +11,23 @@
 
     <div id="content">
         <div id="main_content">
-            <h4>License Agreement</h4>
+            <h4>Environment Verification</h4>
 
             <div id="content_install_instructions">
                 <p>
-                    Please read and accept the License agreement before clicking "Next". By clicking "Next" you are
-                    acknowledging the License agreement<br/><br/>
+                    Verifying the current server environment<br/><br/>
                 </p>
-                <b>NO LICENSE FOR THIS VERSION!</b>
+                <b>NO Verification done in this version</b>
+                <p>
+                    System Requirements are as follows (please make sure these are met);<br>
+                    TODO
+                </p>
             </div>
             <div id="content_install_buttons">
-                <button id="step2_back" onclick="location.href = 'step1.php';" type="submit"
+                <button id="step3_back" onclick="location.href = 'step2.php';" type="submit"
                         style="width: 100px; height: 30px">Back
                 </button>
-                <button id="step3" onclick="location.href = 'step3.php';" type="submit"
+                <button id="step4" onclick="location.href = 'step3.php';" type="submit"
                         style="width: 100px; height: 30px">Next
                 </button>
             </div>
@@ -35,7 +38,7 @@
                     <b>Introduction</b><br> <br>
                     <b>Select Language</b><br> <br>
                     <b>Licence Agreement</b><br> <br>
-                    Environment Verification<br> <br>
+                    <b>Environment Verification</b><br> <br>
                     Database Settings<br> <br>
                     Other Settings<br> <br>
                     Ready to Install<br> <br>
