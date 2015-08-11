@@ -1,3 +1,12 @@
+<?php session_start();
+if ($_POST) {
+    $_SESSION["lang"] = $_POST["lang"];
+    $_SESSION["hostname"] = $_POST["hostname"];
+    $_SESSION["username"] = $_POST["username"];
+    $_SESSION["password"] = $_POST["password"];
+    $_SESSION["database"] = $_POST["database"];
+}
+?>
 <html>
 <head>
     <title>exTracker Installer | Other Settings</title>
@@ -20,12 +29,19 @@
                 <b>Needs to be configurable</b>
             </div>
             <div id="content_install_buttons">
-                <button id="step5_back" onclick="location.href = 'step4.php';" type="submit"
-                        style="width: 100px; height: 30px">Back
-                </button>
-                <button id="step6" onclick="location.href = 'step6.php';" type="submit"
-                        style="width: 100px; height: 30px">Next
-                </button>
+                <form action="step6.php" method="post">
+                    <input type="hidden" value="<?php echo $_SESSION['lang']; ?>" name="lang"/>
+                    <input type="hidden" value="<?php echo $_SESSION['hostname']; ?>" name="hostname"/>
+                    <input type="hidden" value="<?php echo $_SESSION['username']; ?>" name="username"/>
+                    <input type="hidden" value="<?php echo $_SESSION['password']; ?>" name="password"/>
+                    <input type="hidden" value="<?php echo $_SESSION['database']; ?>" name="database"/>
+                    <button id="step5_back" onclick="location.href = 'step4.php';" type="button"
+                            style="width: 100px; height: 30px">Back
+                    </button>
+                    <button id="step6" onclick="location.href = 'step6.php';" type="submit"
+                            style="width: 100px; height: 30px">Next
+                    </button>
+                </form>
             </div>
         </div>
         <div id="summary_content">

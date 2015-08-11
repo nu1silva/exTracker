@@ -1,3 +1,12 @@
+<?php session_start();
+if ($_POST) {
+    $_SESSION["lang"] = $_POST["lang"];
+    $_SESSION["hostname"] = $_POST["hostname"];
+    $_SESSION["username"] = $_POST["username"];
+    $_SESSION["password"] = $_POST["password"];
+    $_SESSION["database"] = $_POST["database"];
+}
+?>
 <html>
 <head>
     <title>exTracker Installer | Install</title>
@@ -15,9 +24,14 @@
 
             <div id="content_install_instructions">
                 <p>
-                    Summary of the installation<br/><br/>
+                    <?php
+                    echo "Selected Language     : " . $_SESSION["lang"] . "<br/>";
+                    echo "Database Hostname     : " . $_SESSION["hostname"] . "<br/>";
+                    echo "Database Username     : " . $_SESSION["username"] . "<br/>";
+                    echo "Database Password     : " . $_SESSION["password"] . "<br/>";
+                    echo "Database Database     : " . $_SESSION["database"] . "<br/>";
+                    ?>
                 </p>
-                <b>Needs to be configurable</b>
             </div>
             <div id="content_install_buttons">
                 <button id="step6_back" onclick="location.href = 'step5.php';" type="submit"

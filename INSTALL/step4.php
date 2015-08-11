@@ -1,3 +1,8 @@
+<?php
+if ($_POST) {
+    $_SESSION["lang"] = $_POST["lang"];
+}
+?>
 <html>
 <head>
     <title>exTracker Installer | Database Settings</title>
@@ -19,41 +24,47 @@
                     can configure these details here.<br/><br/>
                 </p>
                 <br/>
-                <table
-                    style="width:100%;font-family: lucida grande, tahoma, verdana, arial, sans-serif; font-size: 12px;">
-                    <tr>
-                        <td style="width:30%">Database hostname</td>
-                        <td style="width:70%"><input style="width: 300px; height: 25px" type="text" name="hostname">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="width:30%">Database username</td>
-                        <td style="width:70%"><input style="width: 300px; height: 25px" type="text" name="username">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="width:30%">Database password</td>
-                        <td style="width:70%"><input style="width: 300px; height: 25px" type="text" name="password">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="width:30%">Database name</td>
-                        <td style="width:70%"><input style="width: 300px; height: 25px" type="text" name="database">
-                        </td>
-                    </tr>
-                </table>
-                <br>
-                <p>
-                    *No validation is done hence please add the correct details.
-                </p>
+
+                <form action="step5.php" method="post">
+                    <input type="hidden" value="<?php echo $_SESSION['lang']; ?>" name="lang"/>
+                    <table
+                        style="width:100%;font-family: lucida grande, tahoma, verdana, arial, sans-serif; font-size: 12px;">
+                        <tr>
+                            <td style="width:30%">Database hostname</td>
+                            <td style="width:70%"><input style="width: 300px; height: 25px" type="text" name="hostname">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width:30%">Database username</td>
+                            <td style="width:70%"><input style="width: 300px; height: 25px" type="text" name="username">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width:30%">Database password</td>
+                            <td style="width:70%"><input style="width: 300px; height: 25px" type="text" name="password">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width:30%">Database name</td>
+                            <td style="width:70%"><input style="width: 300px; height: 25px" type="text" name="database">
+                            </td>
+                        </tr>
+                    </table>
+                    <br>
+
+                    <p>
+                        * No validation is done hence please add the correct details.<br>
+                        NOTE: ONLY supports MySQL
+                    </p>
             </div>
             <div id="content_install_buttons">
-                <button id="step4_back" onclick="location.href = 'step3.php';" type="submit"
+                <button id="step4_back" onclick="location.href = 'step3.php';" type="button"
                         style="width: 100px; height: 30px">Back
                 </button>
-                <button id="step5" onclick="location.href = 'step5.php';" type="submit"
+                <button id="step5" type="submit"
                         style="width: 100px; height: 30px">Next
                 </button>
+                </form>
             </div>
         </div>
         <div id="summary_content">

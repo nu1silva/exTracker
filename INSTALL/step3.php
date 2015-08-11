@@ -1,3 +1,8 @@
+<?php
+if ($_POST) {
+    $_SESSION["lang"] = $_POST["lang"];
+}
+?>
 <html>
 <head>
     <title>exTracker Installer | Environment Verification</title>
@@ -12,24 +17,29 @@
     <div id="content">
         <div id="main_content">
             <h4>Environment Verification</h4>
+            <?php echo $_SESSION["lang"]; ?>
 
             <div id="content_install_instructions">
                 <p>
                     Verifying the current server environment<br/><br/>
                 </p>
                 <b>NO Verification done in this version</b>
+
                 <p>
                     System Requirements are as follows (please make sure these are met);<br>
                     TODO
                 </p>
             </div>
             <div id="content_install_buttons">
-                <button id="step3_back" onclick="location.href = 'step2.php';" type="submit"
-                        style="width: 100px; height: 30px">Back
-                </button>
-                <button id="step4" onclick="location.href = 'step4.php';" type="submit"
-                        style="width: 100px; height: 30px">Next
-                </button>
+                <form action="step4.php" method="post">
+                    <input type="hidden" value="<?php echo $_SESSION['lang']; ?>" name="lang"/>
+                    <button id="step3_back" onclick="location.href = 'step2.php';" type="button"
+                            style="width: 100px; height: 30px">Back
+                    </button>
+                    <button id="step4" onclick="location.href = 'step4.php';" type="submit"
+                            style="width: 100px; height: 30px">Next
+                    </button>
+                </form>
             </div>
         </div>
         <div id="summary_content">
