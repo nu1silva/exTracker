@@ -31,22 +31,26 @@ if ($_POST) {
                         style="width:100%;font-family: lucida grande, tahoma, verdana, arial, sans-serif; font-size: 12px;">
                         <tr>
                             <td style="width:30%">Database hostname</td>
-                            <td style="width:70%"><input style="width: 300px; height: 25px" type="text" name="hostname">
+                            <td style="width:70%"><input style="width: 300px; height: 25px" type="text" name="hostname"
+                                                         required>
                             </td>
                         </tr>
                         <tr>
                             <td style="width:30%">Database username</td>
-                            <td style="width:70%"><input style="width: 300px; height: 25px" type="text" name="username">
+                            <td style="width:70%"><input style="width: 300px; height: 25px" type="text" name="username"
+                                                         required>
                             </td>
                         </tr>
                         <tr>
                             <td style="width:30%">Database password</td>
-                            <td style="width:70%"><input style="width: 300px; height: 25px" type="text" name="password">
+                            <td style="width:70%"><input style="width: 300px; height: 25px" type="text" name="password"
+                                                         required>
                             </td>
                         </tr>
                         <tr>
                             <td style="width:30%">Database name</td>
-                            <td style="width:70%"><input style="width: 300px; height: 25px" type="text" name="database">
+                            <td style="width:70%"><input style="width: 300px; height: 25px" type="text" name="database"
+                                                         required>
                             </td>
                         </tr>
                     </table>
