@@ -15,14 +15,14 @@
 
             <div id="content_install_instructions">
                 <p>
-                    Installation is complete. click on "Complete" below to remove the install directory and access
-                    exTracker<br/><br/>
+                    Installation is complete.<br/><br/>
+                    <b>NOTE:</b> Please remove the INSTALL directory and click on Complete.
                 </p>
             </div>
             <div id="content_install_buttons">
-                <button id="complete"
-                " type="submit"
-                style="width: 250px; height: 30px">Complete Installation
+                <button id="complete" type="submit" onclick="location.href = '../index.php';"
+                        style="width: 250px; height: 30px">
+                    Complete Installation
                 </button>
             </div>
         </div>

@@ -38,7 +38,7 @@ if ($_POST) {
                     <button id="step5_back" onclick="location.href = 'step4.php';" type="button"
                             style="width: 100px; height: 30px">Back
                     </button>
-                    <button id="step6" onclick="location.href = 'step6.php';" type="submit"
+                    <button id="step6" type="submit"
                             style="width: 100px; height: 30px">Next
                     </button>
                 </form>

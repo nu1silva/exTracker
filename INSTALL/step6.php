@@ -31,15 +31,29 @@ if ($_POST) {
                     echo "Database Password     : " . $_SESSION["password"] . "<br/>";
                     echo "Database Database     : " . $_SESSION["database"] . "<br/>";
                     ?>
+                    <br><br>
+                    Please add the following in between <\?php and ?> after creating a file named config.db.php<br><br>
+                    <?php
+                    echo "\$mysql_hostname = \"" . $_SESSION["hostname"] . "\";<br/>";
+                    echo "\$mysql_username = \"" . $_SESSION["username"] . "\";<br/>";
+                    echo "\$mysql_password = \"" . $_SESSION["password"] . "\";<br/>";
+                    echo "\$mysql_database = \"" . $_SESSION["database"] . "\";<br/>";
+                    ?>
                 </p>
             </div>
             <div id="content_install_buttons">
-                <button id="step6_back" onclick="location.href = 'step5.php';" type="submit"
-                        style="width: 100px; height: 30px">Back
-                </button>
-                <button id="step7" onclick="location.href = 'complete.php';" type="submit"
-                        style="width: 200px; height: 30px">Install
-                </button>
+                <form action="complete.php" method="post">
+                    <input type="hidden" value="<?php echo $_SESSION['hostname']; ?>" name="hostname"/>
+                    <input type="hidden" value="<?php echo $_SESSION['username']; ?>" name="username"/>
+                    <input type="hidden" value="<?php echo $_SESSION['password']; ?>" name="password"/>
+                    <input type="hidden" value="<?php echo $_SESSION['database']; ?>" name="database"/>
+                    <button id="step6_back" onclick="location.href = 'step5.php';" type="button"
+                            style="width: 100px; height: 30px">Back
+                    </button>
+                    <button id="step7" onclick="location.href = 'complete.php';" type="submit"
+                            style="width: 200px; height: 30px">Install
+                    </button>
+                </form>
             </div>
         </div>
         <div id="summary_content">
