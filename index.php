@@ -1,7 +1,7 @@
 <?php
-//include_once('lock.php');
+include_once('lock.php');
 if (file_exists(INSTALL)) {
-	header("Location: INSTALL/install.php");
+    //header("Location: INSTALL/install.php");
 }
 ?>
 

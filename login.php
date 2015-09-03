@@ -30,9 +30,6 @@ $error = $_GET['error'];
             <input type="submit" id="login-button" value="Sign In">
         </fieldset>
     </form>
-    <div id="login-panel-other-options">
-        <a href="login.php">Can not remember password?</a>
-    </div>
 </div>
 <div id="login-copyrights">
     <p>copyrights &copy; 2012-2013. nu1silva.com, All Rights Reserved.</p>

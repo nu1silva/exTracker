@@ -1,7 +1,7 @@
 <?php
 $mysql_hostname = "localhost";
-$mysql_user = "xtracker";
-$mysql_password = "xtracker";
+$mysql_user = "root";
+$mysql_password = "root";
 $mysql_database = "xtracker";
 
 
