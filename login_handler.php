@@ -3,7 +3,7 @@
 include_once("config.db.php");
 include_once("plugins/KLogger.php");
 
-$log = new KLogger ("/public_html/extracker/logs/", KLogger::DEBUG);
+$log = new KLogger ("/var/www/exTracker/logs/", KLogger::DEBUG);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 

@@ -42,15 +42,20 @@ h1, h2, h3, h4, h5 {
     width: 1200px;
 }
 
+#header-logo {
+    padding: 20px;
+    float: left;
+    width: 500px;
+}
+
 #header-options {
-    background: none repeat scroll 0% 0% #ffffff;
-    box-shadow: 0pt 1px 2px rgba(0, 0, 0, 0.5);
-    border-radius: 5px 5px 5px 5px;
     position: absolute;
     top: 5px;
     right: 5px;
     width: 300px;
     height: 20px;
+    text-align: right;
+    padding-right: 20px;
 }
 
 #header-options-content {
@@ -287,7 +292,10 @@ h1, h2, h3, h4, h5 {
 
 #footer-content {
     font-size: 10px;
-    text-align: center;
+    text-align: right;
+    padding-top: 20px;
+    padding-right: 20px;
+    color: #FFFFFF;
 }
 
 #footer-logo {

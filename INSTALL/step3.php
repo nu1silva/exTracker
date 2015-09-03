@@ -17,7 +17,6 @@ if ($_POST) {
     <div id="content">
         <div id="main_content">
             <h4>Environment Verification</h4>
-            <?php echo $_SESSION["lang"]; ?>
 
             <div id="content_install_instructions">
                 <p>

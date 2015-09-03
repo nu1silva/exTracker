@@ -1,5 +1,6 @@
 <?php
 include_once('config.db.php');
+include_once('lock.php');
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -12,7 +13,9 @@ include_once('config.db.php');
 
 <body>
 <div id="header">
-    <div style="padding-left: 20px;"><h1>Expense Tracker <?php echo $version ?></h1></div>
+    <div id="header-logo"><h1>Expense Tracker <?php echo $version ?></h1></div>
+    <div id="header-options"><b><?php echo $login_user . " [" . $userType . "]"; ?></b></div>
+</div>
 </body>
 
 </html>

@@ -9,6 +9,7 @@
     <div id="top_menu">
         <ul id="nav">
             <li><a href="index.php">Home</a></li>
+            <li style="float: right; padding-right: 10px"><a href="logout.php">logout</a></li>
         </ul>
     </div>
 </div>
