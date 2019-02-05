@@ -1,8 +1,14 @@
 <?php
-include_once('lock.php');
-if (file_exists(INSTALL)) {
-    //header("Location: INSTALL/install.php");
-}
+//include_once('lock.php');
+include_once('plugins/KLogger.php');
+$configs = include('config.php');
+//if (file_exists(INSTALL)) {
+//    //header("Location: INSTALL/install.php");
+//}
+
+
+$logger = new KLogger ($configs->log_dir, KLogger::DEBUG);
+$logger->logNotice("[page load] dashboard is loading")
 ?>
 
 <html>
@@ -17,18 +23,15 @@ if (file_exists(INSTALL)) {
 <body>
 <div id="container">
     <?php include("header.php"); ?>
-    <?php include("menu.php"); ?>
 
     <div id="content">
-        <div id="main_content">
-            <div style="text-align: center">
-                <h2>exTracker Dashboard</h2>
+        <div id="header-h2">Dashboard</div>
+        <div class="col-sm-12">
+            <div class="col-sm-9"></div>
+            <div class="col-sm-3">
+                <?php include("stats.php"); ?>
             </div>
         </div>
-        <div id="summary_content">
-            <!--            --><?php //include("stats.php"); ?>
-        </div>
-        <div id="clearfix"></div>
     </div>
     <?php include("footer.php"); ?>
 

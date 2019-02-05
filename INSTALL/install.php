@@ -6,8 +6,8 @@
 
 <body>
 <div id="container">
-    <?php include("header.php"); ?>
-    <?php include("menu.php"); ?>
+    <?php include "header.php"; ?>
+    <?php include "menu.php"; ?>
 
     <div id="content">
         <div id="main_content">
@@ -40,7 +40,7 @@
             </div>
         </div>
     </div>
-    <?php include("footer.php"); ?>
+    <?php include "footer.php"; ?>
 
 </div>
 </body>

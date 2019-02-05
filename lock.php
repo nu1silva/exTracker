@@ -15,6 +15,6 @@ $login_user = $fname . " " . $lname;
 $login_session = $row['username'];
 $login_id = $row['id'];
 
-if (!isset($login_session)) {
-    header("Location: login.php");
-}
+//if (!isset($login_session)) {
+//    header("Location: login.php");
+//}

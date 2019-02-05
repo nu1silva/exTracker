@@ -245,25 +245,25 @@ class KLogger
 
         switch ($level) {
             case self::EMERG:
-                return "$time - EMERG -->";
+                return "$time - [EMERG] - ";
             case self::ALERT:
                 return "$time - [AUDIT] - ";
             case self::CRIT:
-                return "$time - CRIT -->";
+                return "$time - [CRIT] - ";
             case self::FATAL: # FATAL is an alias of CRIT
-                return "$time - FATAL -->";
+                return "$time - [FATAL] - ";
             case self::NOTICE:
-                return "$time - NOTICE -->";
+                return "$time - [NOTICE] - ";
             case self::INFO:
                 return "$time - [INFO] - ";
             case self::WARN:
-                return "$time - WARN -->";
+                return "$time - [WARN] - ";
             case self::DEBUG:
                 return "$time - [DEBUG] - ";
             case self::ERR:
-                return "$time - ERROR -->";
+                return "$time - [ERROR] - ";
             default:
-                return "$time - LOG -->";
+                return "$time - [LOG] - ";
         }
     }
 
