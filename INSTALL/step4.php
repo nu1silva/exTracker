@@ -1,4 +1,4 @@
-<?php
+<?php session_start();
 if ($_POST) {
     $_SESSION["lang"] = $_POST["lang"];
 }
@@ -26,7 +26,7 @@ if ($_POST) {
                 <br/>
 
                 <form action="step5.php" method="post">
-                    <input type="hidden" value="<?php echo $_SESSION['lang']; ?>" name="lang"/>
+                    <input type="hidden" value="<?php echo htmlspecialchars($_SESSION['lang'] ?? ''); ?>" name="lang"/>
                     <table
                         style="width:100%;font-family: lucida grande, tahoma, verdana, arial, sans-serif; font-size: 12px;">
                         <tr>

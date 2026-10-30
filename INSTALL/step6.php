@@ -25,28 +25,28 @@ if ($_POST) {
             <div id="content_install_instructions">
                 <p>
                     <?php
-                    echo "Selected Language     : " . $_SESSION["lang"] . "<br/>";
-                    echo "Database Hostname     : " . $_SESSION["hostname"] . "<br/>";
-                    echo "Database Username     : " . $_SESSION["username"] . "<br/>";
-                    echo "Database Password     : " . $_SESSION["password"] . "<br/>";
-                    echo "Database Database     : " . $_SESSION["database"] . "<br/>";
+                    echo "Selected Language     : " . htmlspecialchars($_SESSION["lang"] ?? "") . "<br/>";
+                    echo "Database Hostname     : " . htmlspecialchars($_SESSION["hostname"] ?? "") . "<br/>";
+                    echo "Database Username     : " . htmlspecialchars($_SESSION["username"] ?? "") . "<br/>";
+                    echo "Database Password     : " . htmlspecialchars($_SESSION["password"] ?? "") . "<br/>";
+                    echo "Database Database     : " . htmlspecialchars($_SESSION["database"] ?? "") . "<br/>";
                     ?>
                     <br><br>
                     Please add the following in between <\?php and ?> after creating a file named config.db.php<br><br>
                     <?php
-                    echo "\$mysql_hostname = \"" . $_SESSION["hostname"] . "\";<br/>";
-                    echo "\$mysql_username = \"" . $_SESSION["username"] . "\";<br/>";
-                    echo "\$mysql_password = \"" . $_SESSION["password"] . "\";<br/>";
-                    echo "\$mysql_database = \"" . $_SESSION["database"] . "\";<br/>";
+                    echo "\$mysql_hostname = \"" . htmlspecialchars($_SESSION["hostname"] ?? "") . "\";<br/>";
+                    echo "\$mysql_user = \"" . htmlspecialchars($_SESSION["username"] ?? "") . "\";<br/>";
+                    echo "\$mysql_password = \"" . htmlspecialchars($_SESSION["password"] ?? "") . "\";<br/>";
+                    echo "\$mysql_database = \"" . htmlspecialchars($_SESSION["database"] ?? "") . "\";<br/>";
                     ?>
                 </p>
             </div>
             <div id="content_install_buttons">
                 <form action="complete.php" method="post">
-                    <input type="hidden" value="<?php echo $_SESSION['hostname']; ?>" name="hostname"/>
-                    <input type="hidden" value="<?php echo $_SESSION['username']; ?>" name="username"/>
-                    <input type="hidden" value="<?php echo $_SESSION['password']; ?>" name="password"/>
-                    <input type="hidden" value="<?php echo $_SESSION['database']; ?>" name="database"/>
+                    <input type="hidden" value="<?php echo htmlspecialchars($_SESSION['hostname'] ?? ''); ?>" name="hostname"/>
+                    <input type="hidden" value="<?php echo htmlspecialchars($_SESSION['username'] ?? ''); ?>" name="username"/>
+                    <input type="hidden" value="<?php echo htmlspecialchars($_SESSION['password'] ?? ''); ?>" name="password"/>
+                    <input type="hidden" value="<?php echo htmlspecialchars($_SESSION['database'] ?? ''); ?>" name="database"/>
                     <button id="step6_back" onclick="location.href = 'step5.php';" type="button"
                             style="width: 100px; height: 30px">Back
                     </button>

@@ -1,64 +1,30 @@
 <?php
+require_once('lock.php');
+require_once('report_view.php');
 
-include('lock.php');
-
-require('plugins/gChart.php');
-require('dbplugin.php');
-require('date_handler.php');
-
-$crntYear = getYear();
-$crntMonth = getMonth();
-$crntDay = getDay();
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-    $report_type = addslashes($_POST['report_type']);
-
-    $report_data = addslashes($_POST['month']);
-
-
-    // Set Report Heading
-    if ($report_type == "monthly_breakdown") {
-        $report_header = "Monthly Expenses Report";
-        $report_month = $report_data;
-        header("Location: custom_reports.php?report_type=" . $report_type . "&report_month=" . $report_month);
-    } else {
-        $report_header = "Secret Report";
-    }
-}
-
-$report_error = $_GET['report_error'];
-
+$today = date('Y-m-d');
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>expence tracker | reports</title>
+    <title>expense tracker | reports</title>
     <link rel="stylesheet" href="css/style.css" type="text/css" media="screen"/>
-
+    <link rel="stylesheet" href="css/report.css" type="text/css" media="screen"/>
     <link type="text/css" href="scripts/jquery/css/smoothness/jquery-ui-1.10.3.custom.css" rel="stylesheet"/>
     <script type="text/javascript" src="scripts/jquery/js/jquery-1.9.1.js"></script>
     <script type="text/javascript" src="scripts/jquery/js/jquery-ui-1.10.3.custom.js"></script>
+    <script type="text/javascript" src="scripts/chartjs/chart.umd.min.js"></script>
+    <script type="text/javascript" src="scripts/report.js"></script>
     <script type="text/javascript">
         $(function () {
             $('#tabs').tabs();
-        });
-        $(function () {
-            $("#cust-month-reports").button();
-            $("#cust-year-reports").button();
             $("#cust-month-select-reports").button();
-        });
-        $("#datepicker").datepicker({
-            showOn: "button",
-            buttonImage: "images/calendar.gif",
-            buttonImageOnly: true
         });
     </script>
 </head>
 
-<body>
 <body>
 <div id="container">
     <?php include("header.php"); ?>
@@ -73,58 +39,34 @@ $report_error = $_GET['report_error'];
                     <li><a href="#tabs-1">Daily</a></li>
                     <li><a href="#tabs-2">Monthly</a></li>
                     <li><a href="#tabs-3">Yearly</a></li>
-                    //
-                    <li><a href="#tabs-4">General</a></li>
-                    //
-                    <li><a href="#tabs-5">Custom</a></li>
+                    <li><a href="#tabs-4">Custom</a></li>
                 </ul>
                 <div id="tabs-1">
-                    <? include_once('daily_report.php'); ?>
+                    <?php render_category_report($db, $login_id,
+                        "Daily Expenses Report ( " . date('d-m-Y') . " )", $today, $today, 'chart-daily'); ?>
                 </div>
                 <div id="tabs-2">
-                    <? include_once('monthly_report.php'); ?>
+                    <?php render_category_report($db, $login_id,
+                        "Monthly Expenses Report ( " . date('m-Y') . " )", date('Y-m-01'), date('Y-m-t'), 'chart-monthly'); ?>
                 </div>
                 <div id="tabs-3">
-                    <? include_once('yearly_report.php'); ?>
+                    <?php render_category_report($db, $login_id,
+                        "Yearly Expenses Report ( " . date('Y') . " )", date('Y-01-01'), date('Y-12-31'), 'chart-yearly'); ?>
                 </div>
                 <div id="tabs-4">
-                    <h3>General Expense Reports</h3>
-
-                    <form id="year_breakdown" action="" method="post">
-                        <button id="cust-year-reports" style="width: 300px">Generate 2013 Report</button>
-                    </form>
-                    <p>Generates detailed report for the year of 2013</p>
-                    <hr>
-                    <form id="month_breakdown" action="" method="post">
-                        <button id="cust-month-reports" style="width: 300px">Generate August Report</button>
-                    </form>
-                    <p>Generates detailed report for the month of August</p>
-                    <hr>
-                </div>
-                <div id="tabs-5">
                     <h3>Custom Reporting</h3>
 
-                    <form id="month_breakdown" action="" method="post">
-                        <select id="month" name="month" class="required" style="padding: 3px;">
-                            <option value="1">January</option>
-                            <option value="2">February</option>
-                            <option value="3">March</option>
-                            <option value="4">April</option>
-                            <option value="5">May</option>
-                            <option value="6">June</option>
-                            <option value="7">July</option>
-                            <option value="8">August</option>
-                            <option value="9">September</option>
-                            <option value="10">October</option>
-                            <option value="11">November</option>
-                            <option value="12">December</option>
+                    <form action="custom_reports.php" method="get">
+                        <select name="month" style="padding: 3px;">
+                            <?php for ($m = 1; $m <= 12; $m++) { ?>
+                                <option value="<?php echo $m; ?>" <?php echo $m == date('n') ? 'selected' : ''; ?>>
+                                    <?php echo date('F', mktime(0, 0, 0, $m, 1)); ?>
+                                </option>
+                            <?php } ?>
                         </select>
-                        <input type="hidden" name="report_type" value="monthly_breakdown"/>
+                        <input type="number" name="year" value="<?php echo date('Y'); ?>" min="1970" max="9999"
+                               style="width: 70px; padding: 3px;"/>
                         <button id="cust-month-select-reports">Generate Report</button>
-                        <?php echo $report_error ?>
-                    </form>
-                    <form action="">
-                        <p>Date: <input type="text" id="datepicker"></p>
                     </form>
                 </div>
             </div>
@@ -138,4 +80,4 @@ $report_error = $_GET['report_error'];
 </div>
 </body>
 
-</html>			
+</html>

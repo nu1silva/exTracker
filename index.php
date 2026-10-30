@@ -1,8 +1,5 @@
 <?php
-include_once('lock.php');
-if (file_exists(INSTALL)) {
-    //header("Location: INSTALL/install.php");
-}
+require_once('lock.php');
 ?>
 
 <html>
@@ -26,7 +23,7 @@ if (file_exists(INSTALL)) {
             </div>
         </div>
         <div id="summary_content">
-            <!--            --><?php //include("stats.php"); ?>
+            <?php include("stats.php"); ?>
         </div>
         <div id="clearfix"></div>
     </div>
