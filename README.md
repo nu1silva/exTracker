@@ -3,6 +3,8 @@ exTracker
 
 PHP expense tracking and reporting software
 
+![exTracker demo: log in, add an expense, view daily, monthly and yearly reports](docs/demo.gif)
+
 Running locally (Docker)
 ------------------------
 
@@ -24,3 +26,4 @@ Requires PHP 8.1+ with mysqli, and MySQL 5.7+ or MariaDB 10.3+.
 2. Set `DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_NAME` and optionally `EXTRACKER_LOG_DIR`
    in the web server's environment, or edit the defaults in `config.db.php`.
 3. Make sure the log directory (default `/var/www/exTracker/logs/`) is writable by the web server.
+
