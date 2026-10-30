@@ -1,42 +1,31 @@
 <?php
 
-include_once("config.db.php");
-include_once("plugins/KLogger.php");
+require_once('bootstrap.php');
+require_post_with_csrf();
 
-$log = new KLogger ("/var/www/exTracker/logs/", KLogger::DEBUG);
+$myusername = (string)($_POST['username'] ?? '');
+$mypassword = (string)($_POST['password'] ?? '');
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+$user = getUserByUsername($db, $myusername);
 
-    // username and password sent from form
-    $myusername = addslashes($_POST['username']);
-    $mypassword = addslashes($_POST['password']);
-
-    $encrypt_password1 = md5($mypassword);
-    $encrypt_password = stripslashes($encrypt_password1);
-
-    $sql = "SELECT id,status FROM user_accounts WHERE username='$myusername' and password='$encrypt_password'";
-    $result = mysqli_query($db, $sql);
-    $row = mysqli_fetch_array($result);
-    $status = $row['status'];
-
-    $count = mysqli_num_rows($result);
-
-    // If result matched $myusername and $mypassword, table row must be 1 row
-    if ($count == 1) {
-        if ($status == 'ACTIVE') {
-            session_start("myusername");
-            $_SESSION['login_user'] = $myusername;
-            $log->logAlert("user [" . $myusername . "] login successful");
-
-            header("location: index.php");
-        } else if ($status == 'SUSPENDED') {
-            $error = "The user is Suspended, Please contact the administrator";
-            $log->logAlert("user [" . $myusername . "] login failed with reason [" . $error . "]");
-            header("location: login.php?error=" . $error);
-        }
-    } else {
-        $error = "Invalid Username or Password";
-        $log->logAlert("user [" . $myusername . "] login failed with reason [" . $error . "]");
-        header("location: login.php?error=" . $error);
-    }
+if (!$user || !password_verify($mypassword, $user['password'])) {
+    $error = "Invalid Username or Password";
+    $log->logAlert("user [" . $myusername . "] login failed with reason [" . $error . "]");
+    redirect_with("login.php", "error", $error);
 }
+
+if ($user['status'] !== 'ACTIVE') {
+    $error = "The user is Suspended, Please contact the administrator";
+    $log->logAlert("user [" . $myusername . "] login failed with reason [" . $error . "]");
+    redirect_with("login.php", "error", $error);
+}
+
+if (password_needs_rehash($user['password'], PASSWORD_DEFAULT)) {
+    updatePasswordHash($db, $user['id'], password_hash($mypassword, PASSWORD_DEFAULT));
+}
+
+session_regenerate_id(true);
+$_SESSION['user_id'] = (int)$user['id'];
+$log->logAlert("user [" . $myusername . "] login successful");
+
+redirect("index.php");

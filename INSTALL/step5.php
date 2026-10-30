@@ -30,11 +30,11 @@ if ($_POST) {
             </div>
             <div id="content_install_buttons">
                 <form action="step6.php" method="post">
-                    <input type="hidden" value="<?php echo $_SESSION['lang']; ?>" name="lang"/>
-                    <input type="hidden" value="<?php echo $_SESSION['hostname']; ?>" name="hostname"/>
-                    <input type="hidden" value="<?php echo $_SESSION['username']; ?>" name="username"/>
-                    <input type="hidden" value="<?php echo $_SESSION['password']; ?>" name="password"/>
-                    <input type="hidden" value="<?php echo $_SESSION['database']; ?>" name="database"/>
+                    <input type="hidden" value="<?php echo htmlspecialchars($_SESSION['lang'] ?? ''); ?>" name="lang"/>
+                    <input type="hidden" value="<?php echo htmlspecialchars($_SESSION['hostname'] ?? ''); ?>" name="hostname"/>
+                    <input type="hidden" value="<?php echo htmlspecialchars($_SESSION['username'] ?? ''); ?>" name="username"/>
+                    <input type="hidden" value="<?php echo htmlspecialchars($_SESSION['password'] ?? ''); ?>" name="password"/>
+                    <input type="hidden" value="<?php echo htmlspecialchars($_SESSION['database'] ?? ''); ?>" name="database"/>
                     <button id="step5_back" onclick="location.href = 'step4.php';" type="button"
                             style="width: 100px; height: 30px">Back
                     </button>

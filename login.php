@@ -1,7 +1,7 @@
 <?php
 
-include_once('config.db.php');
-$error = $_GET['error'];
+require_once('bootstrap.php');
+$error = $_GET['error'] ?? '';
 
 ?>
 
@@ -16,12 +16,13 @@ $error = $_GET['error'];
 
 <body>
 <div id="clearfix" style="padding-top:150px;"></div>
-<div style="font-size:13px; color:#cc0000; margin-top:10px; text-align:center"><?php echo $error; ?></div>
+<div style="font-size:13px; color:#cc0000; margin-top:10px; text-align:center"><?php echo h($error); ?></div>
 <div id="login-panel">
     <div id="login-panel-top">
         <div id="login-panel-top-font"><b>exTracker <?php echo $version ?></b></div>
     </div>
     <form id="login" action='login_handler.php' method='POST'>
+        <?php echo csrf_field(); ?>
         <fieldset id="inputs">
             <input id="username" name="username" type="text" placeholder="Username" required>
             <input id="password" name="password" type="password" placeholder="Password" required>

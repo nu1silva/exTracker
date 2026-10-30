@@ -27,7 +27,7 @@ if ($_POST) {
             </div>
             <div id="content_install_buttons">
                 <form action="step3.php" method="post">
-                    <input type="hidden" value="<?php echo $_SESSION['lang']; ?>" name="lang"/>
+                    <input type="hidden" value="<?php echo htmlspecialchars($_SESSION['lang'] ?? ''); ?>" name="lang"/>
                     <button id="step2_back" onclick="location.href = 'step1.php';" type="button"
                             style="width: 100px; height: 30px">Back
                     </button>

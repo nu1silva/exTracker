@@ -1,4 +1,4 @@
-<?php
+<?php session_start();
 if ($_POST) {
     $_SESSION["lang"] = $_POST["lang"];
 }
@@ -31,7 +31,7 @@ if ($_POST) {
             </div>
             <div id="content_install_buttons">
                 <form action="step4.php" method="post">
-                    <input type="hidden" value="<?php echo $_SESSION['lang']; ?>" name="lang"/>
+                    <input type="hidden" value="<?php echo htmlspecialchars($_SESSION['lang'] ?? ''); ?>" name="lang"/>
                     <button id="step3_back" onclick="location.href = 'step2.php';" type="button"
                             style="width: 100px; height: 30px">Back
                     </button>

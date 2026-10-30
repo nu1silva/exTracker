@@ -1,20 +1,15 @@
 <?php
-include_once('config.db.php');
-session_start();
+// Include at the top of every page that needs a logged-in user.
+require_once(__DIR__ . '/bootstrap.php');
 
-$user_check = $_SESSION['login_user'];
+$user = isset($_SESSION['user_id']) ? getUserById($db, $_SESSION['user_id']) : null;
 
-$ses_sql = mysqli_query($db, "select id,username,fname,lname,user_type from user_accounts where username='$user_check'");
-
-$row = mysqli_fetch_array($ses_sql);
-$fname = $row['fname'];
-$lname = $row['lname'];
-$userType = $row['user_type'];
-
-$login_user = $fname . " " . $lname;
-$login_session = $row['username'];
-$login_id = $row['id'];
-
-if (!isset($login_session)) {
-    header("Location: login.php");
+if (!$user || $user['status'] !== 'ACTIVE') {
+    $_SESSION = array();
+    redirect("login.php");
 }
+
+$login_id = (int)$user['id'];
+$login_session = $user['username'];
+$login_user = $user['fname'] . " " . $user['lname'];
+$userType = $user['user_type'];
