@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Accounts · exTracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&amp;display=swap">
+  <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="components.css">
+</head>
+<body>
+  <template id="screen">
+    <div class="{{ cls }}" style="min-height: 100vh">
+      <dc-import name="AppNav" active="accounts" theme="{{ theme }}"></dc-import>
+      <main class="page">
+
+        <div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 20px 32px">
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <h1 class="h1">Accounts</h1>
+            <span class="t2 tnum">€9,335.45 across 6 accounts. Dollars at 1 EUR = 1.0800 USD, ECB 24 Nov.</span>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 10px">
+            <button type="button" class="btn">Transfer</button>
+            <button type="button" class="btn">Add account</button>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+          <section aria-label="All accounts" style="flex: 1 1 340px; display: flex; flex-direction: column; gap: 12px">
+            <sc-for list="{{ groups }}" as="g">
+              <div class="card" style="padding: 14px 20px 12px">
+                <div style="display: flex; justify-content: space-between; gap: 12px; padding-bottom: 4px"><h2 class="t3" style="margin: 0; font-weight: 600">{{ g.name }}</h2><span class="t3 tnum">{{ g.total }}</span></div>
+                <sc-for list="{{ g.items }}" as="a">
+                  <button type="button" class="row" aria-pressed="{{ a.on }}" onClick="{{ a.pick }}" style="grid-template-columns: minmax(0, 1fr) auto; min-height: 60px">
+                    <span style="display: flex; flex-direction: column; min-width: 0"><span class="clip" style="font-weight: 650; font-size: 15px">{{ a.name }}</span><span class="t3">{{ a.type }}</span></span>
+                    <span style="display: flex; flex-direction: column; align-items: flex-end"><span class="tnum" style="font-weight: 650; font-size: 15px">{{ a.amount }}</span><span class="t3 tnum">{{ a.note }}</span></span>
+                  </button>
+                </sc-for>
+              </div>
+            </sc-for>
+          </section>
+
+          <section class="card" aria-label="Account details" style="flex: 999 1 600px; display: flex; flex-direction: column; gap: 26px; padding: 28px">
+            <div style="display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 20px">
+              <div style="display: flex; flex-direction: column; gap: 6px">
+                <h2 class="h2">{{ acc.name }}</h2>
+                <span class="figure" style="font-size: 44px">{{ acc.amount }}</span>
+                <span class="t2">{{ acc.status }}</span>
+              </div>
+              <div style="display: flex; flex-wrap: wrap; gap: 10px">
+                <button type="button" class="btn">Edit account</button>
+                <button type="button" class="btn" aria-expanded="{{ recon }}" onClick="{{ toggleRecon }}">Reconcile</button>
+              </div>
+            </div>
+
+            <sc-if value="{{ recon }}">
+              <div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 16px 24px; padding: 20px; border-radius: 14px; background: var(--raised)">
+                <label class="label" style="flex: 1 1 200px">{{ acc.ask }}
+                  <input class="field tnum" inputmode="decimal" value="{{ bank }}" onChange="{{ setBank }}">
+                </label>
+                <div aria-live="polite" style="flex: 2 1 260px; display: flex; flex-direction: column; gap: 2px; min-height: 44px; justify-content: center">
+                  <strong class="tnum" style="font-weight: 650">{{ diff.title }}</strong>
+                  <span class="t2">{{ diff.body }}</span>
+                </div>
+                <button type="button" class="btn btn-primary" onClick="{{ toggleRecon }}">{{ diff.action }}</button>
+              </div>
+            </sc-if>
+
+            <div style="display: flex; flex-direction: column; gap: 12px">
+              <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 16px">
+                <h3 class="h2" style="font-size: 15px">Balance in November</h3>
+                <span class="t2 tnum" aria-live="polite">{{ chart.readout }}</span>
+              </div>
+              <div style="display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 0 10px">
+                <div class="tnum t3" style="position: relative; height: 190px; font-size: 12px">
+                  <span style="position: absolute; right: 0; top: 0; transform: translateY(-50%)">{{ chart.t2 }}</span>
+                  <span style="position: absolute; right: 0; top: 50%; transform: translateY(-50%)">{{ chart.t1 }}</span>
+                  <span style="position: absolute; right: 0; top: 100%; transform: translateY(-50%)">{{ chart.t0 }}</span>
+                </div>
+                <div onPointerMove="{{ chart.move }}" onPointerLeave="{{ chart.leave }}" style="position: relative; height: 190px; border-bottom: 1px solid var(--line-2)">
+                  <div style="position: absolute; left: 0; right: 0; top: 0; border-top: 1px solid var(--line)"></div>
+                  <div style="position: absolute; left: 0; right: 0; top: 50%; border-top: 1px solid var(--line)"></div>
+                  <div style="position: absolute; top: 0; bottom: 0; left: {{ chart.x }}%; border-left: 1px solid var(--text-3)"></div>
+                  <svg role="img" aria-label="Daily balance of the selected account in November" viewBox="0 0 600 190" preserveAspectRatio="none" style="position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible"><path d="{{ chart.path }}" fill="none" stroke="var(--now)" stroke-width="2.5" stroke-linejoin="round" vector-effect="non-scaling-stroke"></path></svg>
+                  <div style="position: absolute; left: {{ chart.x }}%; top: {{ chart.y }}%; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; background: var(--now); border: 2px solid var(--surface)"></div>
+                </div>
+                <span></span>
+                <div class="tnum t3" style="position: relative; height: 24px; font-size: 12px">
+                  <span style="position: absolute; left: 0; top: 6px">1 Nov</span>
+                  <span style="position: absolute; left: 33.33%; top: 6px">11</span>
+                  <span style="position: absolute; left: 66.66%; top: 6px">21</span>
+                  <span style="position: absolute; right: 0; top: 6px">30</span>
+                </div>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 4px">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px">
+                <h3 class="h2" style="font-size: 15px">Records</h3>
+                <a href="records.html" style="display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; text-decoration: underline; text-underline-offset: 4px">Open in Records</a>
+              </div>
+              <div class="t3 ledger" style="padding: 6px 0"><span>Date</span><span>Description</span><span class="right">Amount</span><span class="right">Balance</span></div>
+              <ul>
+                <sc-for list="{{ acc.records }}" as="r">
+                  <li class="ledger" style="min-height: 48px">
+                    <span class="t3 tnum">{{ r.date }}</span>
+                    <span style="display: flex; flex-direction: column; min-width: 0; padding: 6px 0"><span class="clip" style="font-weight: 550">{{ r.name }}</span><span class="t3 clip">{{ r.cat }}</span></span>
+                    <span class="tnum right" style="font-weight: 650">{{ r.amount }}</span>
+                    <span class="tnum right t2">{{ r.bal }}</span>
+                  </li>
+                </sc-for>
+              </ul>
+              <sc-if value="{{ acc.empty }}">
+                <p class="t2" style="margin: 14px 0 0">No records in November. Add a record or transfer money in to see it here.</p>
+              </sc-if>
+            </div>
+          </section>
+        </div>
+
+      </main>
+    </div>
+  </template>
+  <div id="app"></div>
+
+  <script src="prototype.js"></script>
+  <script src="parts/record-form.js"></script>
+  <script src="parts/app-nav.js"></script>
+  <script>
+  class Component extends DCLogic {
+    state = { id: 'ing', recon: true, bank: '3,481.65', hover: null };
+
+    renderVals() {
+      const s = this.state;
+      const theme = this.props.theme === 'dark' ? 'dark' : 'light';
+      const money = (n, c) => (n < 0 ? '−' : '') + (c === 'USD' ? '$' : '€') + Math.abs(n).toLocaleString('en-IE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      const signed = (n, c) => (n > 0 ? '+' : '') + money(n, c);
+      const flat = (v, n) => Array.from({ length: n }, () => v);
+
+      const data = [
+        { id: 'ing', name: 'ING Checking', inst: 'ING', type: 'Checking', cur: 'EUR', bal: 3486.15, checked: 'Reconciled 31 Oct 2026',
+          series: [2156.45, 2114.6, 1996.6, 1972.1, 1930.1, 1792.1, 1702.8, 1702.8, 1678.8, 1655.4, 1655.4, 1571.25, 1571.25, 1513.15, 1474.65, 1406.65, 1384.65, 1353.4, 1353.4, 1263.5, 1202.5, 702.5, 658.45, 606.15, 3486.15],
+          records: [
+            ['25 Nov', 'Transfer to bunq Savings', 'Transfer', -400, 3486.15],
+            ['25 Nov', 'Salary, Brinkhof BV', 'Salary', 3280, 3886.15],
+            ['24 Nov', 'HEMA', 'Home', -18.05, 606.15],
+            ['24 Nov', 'Albert Heijn', 'Groceries', -34.25, 624.2],
+            ['23 Nov', 'Credit card bill', 'Credit card bill', -38, 658.45],
+            ['23 Nov', 'Refund from Bol', 'Online orders', 19.95, 696.45],
+            ['23 Nov', 'NS', 'Public transport', -26, 676.5],
+            ['22 Nov', 'Transfer to Wise USD', 'Transfer', -500, 702.5],
+            ['21 Nov', 'Albert Heijn', 'Groceries and Home', -61, 1202.5]
+          ] },
+        { id: 'sav', name: 'bunq Savings', inst: 'bunq', type: 'Savings', cur: 'EUR', bal: 4200, checked: 'Reconciled 31 Oct 2026',
+          series: flat(3800, 24).concat([4200]), records: [['25 Nov', 'Transfer from ING Checking', 'Transfer', 400, 4200]] },
+        { id: 'trv', name: 'bunq Travel', inst: 'bunq', type: 'Savings', cur: 'EUR', bal: 610, checked: 'Reconciled 31 Oct 2026', series: flat(610, 25), records: [] },
+        { id: 'wise', name: 'Wise USD', inst: 'Wise', type: 'Wallet', cur: 'USD', bal: 842.4, eur: 780, checked: 'Reconciled 31 Oct 2026. Worth €780.00 today',
+          series: flat(304.2, 21).concat(flat(842.4, 4)), records: [['22 Nov', 'Transfer from ING Checking', 'Sent €500.00 at 1.0764', 538.2, 842.4]] },
+        { id: 'rev', name: 'Revolut EUR', inst: 'Revolut', type: 'Wallet', cur: 'EUR', bal: 164.3, checked: 'Reconciled 31 Oct 2026',
+          series: flat(160.55, 4).concat(flat(146.35, 6), [133.36], [303.36], flat(257.36, 7), [223.5, 223.5], flat(164.3, 4)),
+          records: [['22 Nov', 'Dinner, Bar Brouw', 'Restaurants', -59.2, 164.3], ['20 Nov', 'Boekhandel Donner', 'Books', -33.86, 223.5], ['13 Nov', 'Dinner, Warung Mini', 'Restaurants', -46, 257.36], ['12 Nov', 'Sold bike', 'Other income', 170, 303.36], ['11 Nov', 'Spotify', 'Subscriptions', -12.99, 133.36], ['5 Nov', 'Bagels & Beans', 'Restaurants', -14.2, 146.35]] },
+        { id: 'cash', name: 'Cash', inst: 'Cash', type: 'Cash', cur: 'EUR', bal: 95, checked: 'Counted 31 Oct 2026',
+          series: flat(107.8, 18).concat(flat(95, 7)), records: [['19 Nov', 'Lunch, market', 'Restaurants', -12.8, 95]] }
+      ];
+
+      const groups = [];
+      data.forEach((a) => {
+        let g = groups.find((x) => x.name === a.inst);
+        if (!g) { g = { name: a.inst, sum: 0, items: [] }; groups.push(g); }
+        g.sum += a.eur ?? a.bal;
+        g.items.push({
+          name: a.name, type: a.type, on: a.id === s.id,
+          amount: money(a.bal, a.cur),
+          note: a.eur ? '€780.00' : Math.round(a.bal / 9335.45 * 100) + '% of total',
+          pick: () => this.setState({ id: a.id, recon: false, bank: a.bal.toFixed(2), hover: null })
+        });
+      });
+      groups.forEach((g) => { g.total = g.items.length > 1 ? money(g.sum) : ''; });
+
+      const cur = data.find((a) => a.id === s.id);
+      const max = Math.max(...cur.series);
+      const pow = Math.pow(10, Math.floor(Math.log10(max)));
+      const top = [1, 1.5, 2, 3, 4, 5, 6, 8, 10].map((m) => m * pow).find((v) => v >= max);
+      const sym = cur.cur === 'USD' ? '$' : '€';
+      const py = (v) => (top - v) / top * 100;
+      let path = '';
+      cur.series.forEach((v, i) => { path += (i ? ' V' : 'M0 ') + (py(v) * 1.9).toFixed(1) + ' H' + (i + 1) * 20; });
+      const h = s.hover === null ? 24 : s.hover;
+
+      const bankN = parseFloat(String(s.bank).replace(/,/g, '')) || 0;
+      const d = Math.round((bankN - cur.bal) * 100) / 100;
+
+      return {
+        theme, cls: theme === 'light' ? 'ex ex-light' : 'ex',
+        groups,
+        acc: {
+          name: cur.name,
+          amount: money(cur.bal, cur.cur),
+          status: cur.checked,
+          ask: cur.id === 'cash' ? 'Cash counted on 25 Nov 2026' : 'Balance shown by your bank on 25 Nov 2026',
+          empty: cur.records.length === 0,
+          records: cur.records.map(([date, name, cat, amt, bal]) => ({ date, name, cat, amount: signed(amt, cur.cur), bal: money(bal, cur.cur) }))
+        },
+        recon: s.recon,
+        toggleRecon: () => this.setState({ recon: !s.recon }),
+        bank: s.bank, setBank: (e) => this.setState({ bank: e.target.value }),
+        diff: d === 0
+          ? { title: 'Balances match', body: 'Every record up to 25 Nov will be marked reconciled.', action: 'Mark reconciled' }
+          : { title: 'Difference ' + signed(d, cur.cur), body: 'Check for a missing record first, or save the difference as an adjustment you can see in the list.', action: 'Save adjustment' },
+        chart: {
+          path,
+          t2: sym + top.toLocaleString('en-IE'), t1: sym + (top / 2).toLocaleString('en-IE'), t0: sym + '0',
+          x: ((h + 0.5) / 30 * 100).toFixed(2), y: py(cur.series[h]).toFixed(2),
+          readout: (h + 1) + ' Nov: ' + money(cur.series[h], cur.cur),
+          move: (e) => {
+            const r = e.currentTarget.getBoundingClientRect();
+            const i = Math.floor((e.clientX - r.left) / r.width * 30);
+            this.setState({ hover: Math.max(0, Math.min(24, i)) });
+          },
+          leave: () => this.setState({ hover: null })
+        }
+      };
+    }
+  }
+
+    Prototype.screen(Component);
+  </script>
+</body>
+</html>

@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard · exTracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&amp;display=swap">
+  <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="components.css">
+</head>
+<body>
+  <template id="screen">
+    <div class="{{ cls }}" style="min-height: 100vh">
+      <dc-import name="AppNav" active="dashboard" theme="{{ theme }}"></dc-import>
+      <main class="page">
+
+        <section class="on-brand" aria-label="November 2026 overview" style="display: flex; flex-direction: column; gap: 28px; padding: 32px; border-radius: 20px; background: var(--hero); color: var(--on-hero)">
+          <div style="display: flex; flex-wrap: wrap; gap: 28px 40px">
+            <div style="flex: 1 1 330px; display: flex; flex-direction: column; gap: 10px">
+              <div style="display: flex; align-items: center; gap: 4px; margin-left: -12px">
+                <button type="button" class="icon-btn" aria-label="Previous month"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4 6 9l5 5"></path></svg></button>
+                <h1 style="margin: 0; font-size: 17px; font-weight: 650; font-stretch: 106%">November 2026</h1>
+                <button type="button" class="icon-btn" aria-label="Next month" disabled="{{ yes }}" style="color: var(--hero-mute)"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 4 5 5-5 5"></path></svg></button>
+              </div>
+              <div style="margin-top: 20px; font-weight: 550">Total balance</div>
+              <div class="figure" style="font-size: clamp(40px, 12vw, 60px)">€9,335.45</div>
+              <div style="color: var(--on-hero-2); font-weight: 500">€1,198.98 more than at the end of October</div>
+            </div>
+            <div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+              <div aria-live="polite" class="tnum" style="display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 4px 22px; min-height: 22px">
+                <strong style="font-weight: 700">{{ picked.date }}</strong>
+                <span>Balance <strong style="font-weight: 700">{{ picked.balance }}</strong></span>
+                <span>In <strong style="font-weight: 700">{{ picked.in }}</strong></span>
+                <span>Out <strong style="font-weight: 700">{{ picked.out }}</strong></span>
+              </div>
+              <div style="overflow-x: auto">
+                <div style="min-width: 760px">
+                  <div style="position: relative; height: 156px">
+                    <div style="position: absolute; left: 0; right: 0; top: {{ grid.a }}%; border-top: 1px solid var(--hero-line)"></div>
+                    <div style="position: absolute; left: 0; right: 0; top: {{ grid.b }}%; border-top: 1px solid var(--hero-line)"></div>
+                    <div class="tnum" style="position: absolute; right: 0; top: {{ grid.a }}%; padding-top: 3px; font-size: 12px; color: var(--on-hero-2)">€8,000</div>
+                    <div class="tnum" style="position: absolute; right: 0; top: {{ grid.b }}%; padding-top: 3px; font-size: 12px; color: var(--on-hero-2)">€6,000</div>
+                    <div style="position: absolute; top: 0; bottom: 0; left: {{ picked.left }}%; width: 3.3333%; background: var(--hero-band)"></div>
+                    <svg role="img" aria-label="Total balance per day in November: 7,116 euros after rent on the 1st, 6,055 euros on the 24th, 9,335 euros after salary on the 25th" viewBox="0 0 600 150" preserveAspectRatio="none" style="position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible"><path d="{{ path }}" fill="none" stroke="var(--on-hero)" stroke-width="2.5" stroke-linejoin="round" vector-effect="non-scaling-stroke"></path></svg>
+                    <div style="position: absolute; left: {{ picked.mid }}%; top: {{ picked.top }}%; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; background: var(--on-hero); border: 2px solid var(--hero)"></div>
+                  </div>
+                  <div style="display: grid; grid-template-columns: repeat(30, minmax(0, 1fr)); border-top: 2px solid var(--on-hero)">
+                    <sc-for list="{{ days }}" as="d">
+                      <button type="button" class="tnum" aria-label="{{ d.label }}" aria-pressed="{{ d.sel }}" disabled="{{ d.future }}" onClick="{{ d.pick }}" style="height: 44px; padding: 0; border: 0; border-radius: 0 0 6px 6px; font-size: 12.5px; font-weight: {{ d.weight }}; background: {{ d.bg }}; color: {{ d.fg }}">{{ d.n }}</button>
+                    </sc-for>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap: 20px 32px; padding-top: 22px; border-top: 1px solid var(--hero-line)">
+            <div style="display: flex; flex-direction: column; gap: 3px"><span style="color: var(--on-hero-2)">Money in</span><span class="figure" style="font-size: 24px">€3,450.00</span></div>
+            <div style="display: flex; flex-direction: column; gap: 3px"><span style="color: var(--on-hero-2)">Money out</span><span class="figure" style="font-size: 24px">€2,249.35</span></div>
+            <div style="display: flex; flex-direction: column; gap: 3px"><span style="color: var(--on-hero-2)">Kept so far</span><span class="figure" style="font-size: 24px">€1,200.65</span></div>
+            <div style="display: flex; flex-direction: column; gap: 3px"><span style="color: var(--on-hero-2)">Left for day-to-day, €19.33 a day until 30 Nov</span><span class="figure" style="font-size: 24px">€96.65</span></div>
+          </div>
+        </section>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: stretch">
+          <section class="card" style="flex: 3 1 560px; display: flex; flex-direction: column; gap: 16px">
+            <div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 16px">
+              <h2 class="h2">Where it went</h2>
+              <span class="t3">1 to 25 Nov, compared with 1 to 25 Oct</span>
+            </div>
+            <div role="img" aria-label="Share of spending: Housing 52%, Food 19%, Shopping 8%, Transport 7%, Health 6%, Leisure 5%, Credit card bill 2%" style="display: flex; gap: 2px; height: 14px">
+              <sc-for list="{{ cats }}" as="c">
+                <span style="flex: {{ c.v }} 1 0; border-radius: 4px; background: {{ c.color }}; opacity: {{ c.dim }}"></span>
+              </sc-for>
+            </div>
+            <div style="display: flex; flex-direction: column">
+              <sc-for list="{{ cats }}" as="c">
+                <button type="button" class="row catrow" aria-expanded="{{ c.open }}" onClick="{{ c.toggle }}" style="min-height: 46px">
+                  <span class="swatch" style="background: {{ c.color }}"></span>
+                  <span class="clip" style="font-weight: 550">{{ c.name }}</span>
+                  <span class="tnum right t3">{{ c.share }}</span>
+                  <span class="tnum right" style="font-weight: 650">{{ c.amount }}</span>
+                  <span class="tnum right t3 clip">{{ c.change }}</span>
+                </button>
+                <sc-if value="{{ c.open }}">
+                  <ul style="padding: 4px 0 8px 22px; display: flex; flex-direction: column">
+                    <sc-for list="{{ c.subs }}" as="s">
+                      <li class="subrow" style="color: var(--text-2)"><span>{{ s.name }}</span><span class="tnum">{{ s.amount }}</span></li>
+                    </sc-for>
+                  </ul>
+                </sc-if>
+              </sc-for>
+            </div>
+          </section>
+
+          <section class="card" style="flex: 2 1 420px; display: flex; flex-direction: column; gap: 20px">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px">
+              <h2 class="h2">Day-to-day budgets</h2>
+              <a href="budgets.html" style="display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; text-decoration: underline; text-underline-offset: 4px">All budgets</a>
+            </div>
+            <div style="position: relative; display: flex; flex-direction: column; gap: 4px; padding-top: 26px">
+              <div class="pace" aria-hidden="true" style="position: absolute; inset: 0; display: grid; pointer-events: none">
+                <span></span>
+                <span style="position: relative; display: block; height: 100%">
+                  <span style="position: absolute; left: 64.1%; top: 20px; bottom: 0; border-left: 2px solid var(--text)"></span>
+                  <span class="tnum" style="position: absolute; left: 64.1%; top: 0; transform: translateX(-50%); font-size: 12px; font-weight: 600; white-space: nowrap">25 Nov</span>
+                </span>
+                <span></span>
+              </div>
+              <sc-for list="{{ budgets }}" as="b">
+                <div class="pace" style="display: grid; align-items: center; min-height: 76px">
+                  <span style="display: flex; flex-direction: column"><span style="font-weight: 600">{{ b.name }}</span><span class="t3 tnum">of {{ b.limit }}</span></span>
+                  <span style="position: relative; display: block; height: 14px">
+                    <span style="position: absolute; inset: 0 auto 0 0; width: 76.92%; border-radius: 4px; background: var(--track)"></span>
+                    <span style="position: absolute; inset: 0 auto 0 0; width: {{ b.fill }}%; border-radius: 0 4px 4px 0; background: {{ b.color }}"></span>
+                    <span class="hatch" style="position: absolute; top: 0; bottom: 0; left: calc(76.92% + 2px); width: {{ b.over }}%"></span>
+                  </span>
+                  <span class="tnum right" style="font-weight: 650; color: {{ b.tone }}">{{ b.left }}</span>
+                </div>
+              </sc-for>
+            </div>
+            <p class="t2" style="margin: auto 0 0">The line marks today. A bar that has passed it is being spent faster than the month is passing.</p>
+          </section>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr)); gap: 24px">
+          <section class="card" style="display: flex; flex-direction: column; gap: 10px">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px">
+              <h2 class="h2">Accounts</h2>
+              <a href="accounts.html" style="display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; text-decoration: underline; text-underline-offset: 4px">All accounts</a>
+            </div>
+            <div style="display: flex; flex-direction: column">
+              <sc-for list="{{ accounts }}" as="a">
+                <a href="accounts.html" class="row" style="grid-template-columns: minmax(0, 1fr) auto; min-height: 56px">
+                  <span style="display: flex; flex-direction: column; min-width: 0"><span class="clip" style="font-weight: 600">{{ a.name }}</span><span class="t3 clip">{{ a.type }}</span></span>
+                  <span style="display: flex; flex-direction: column; align-items: flex-end"><span class="tnum" style="font-weight: 650">{{ a.amount }}</span><span class="t3 tnum">{{ a.note }}</span></span>
+                </a>
+              </sc-for>
+            </div>
+          </section>
+
+          <section class="card" style="display: flex; flex-direction: column; gap: 14px">
+            <div style="display: flex; align-items: center; min-height: 44px"><h2 class="h2">Spending against October</h2></div>
+            <div aria-live="polite" style="display: flex; flex-direction: column; gap: 2px">
+              <span class="figure" style="font-size: 26px">{{ cum.headline }}</span>
+              <span class="t2 tnum">{{ cum.sub }}</span>
+            </div>
+            <div style="display: flex; gap: 18px; font-size: 13px; color: var(--text-2)">
+              <span style="display: inline-flex; align-items: center; gap: 8px"><span style="width: 16px; border-top: 3px solid var(--now)"></span>November</span>
+              <span style="display: inline-flex; align-items: center; gap: 8px"><span style="width: 16px; border-top: 3px solid var(--prev)"></span>October</span>
+            </div>
+            <div style="flex: 1 1 200px; display: grid; grid-template-columns: 46px minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; gap: 0 8px; min-height: 200px">
+              <div class="tnum t3" style="position: relative; font-size: 12px">
+                <span style="position: absolute; right: 0; top: 0; transform: translateY(-50%)">€2,500</span>
+                <span style="position: absolute; right: 0; top: 40%; transform: translateY(-50%)">€1,500</span>
+                <span style="position: absolute; right: 0; top: 80%; transform: translateY(-50%)">€500</span>
+              </div>
+              <div onPointerMove="{{ cum.move }}" onPointerLeave="{{ cum.leave }}" style="position: relative; border-bottom: 1px solid var(--line-2)">
+                <div style="position: absolute; left: 0; right: 0; top: 0; border-top: 1px solid var(--line)"></div>
+                <div style="position: absolute; left: 0; right: 0; top: 40%; border-top: 1px solid var(--line)"></div>
+                <div style="position: absolute; left: 0; right: 0; top: 80%; border-top: 1px solid var(--line)"></div>
+                <div style="position: absolute; top: 0; bottom: 0; left: {{ cum.x }}%; border-left: 1px solid var(--text-3)"></div>
+                <svg role="img" aria-label="Cumulative spending: November reaches 2,249 euros on the 25th, October had reached 2,361 euros by then" viewBox="0 0 310 250" preserveAspectRatio="none" style="position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible">
+                  <path d="{{ cum.oct }}" fill="none" stroke="var(--prev)" stroke-width="2" stroke-linejoin="round" vector-effect="non-scaling-stroke"></path>
+                  <path d="{{ cum.nov }}" fill="none" stroke="var(--now)" stroke-width="2.5" stroke-linejoin="round" vector-effect="non-scaling-stroke"></path>
+                </svg>
+                <div style="position: absolute; left: {{ cum.x }}%; top: {{ cum.y }}%; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; background: var(--now); border: 2px solid var(--surface)"></div>
+              </div>
+              <span></span>
+              <div class="tnum t3" style="display: flex; justify-content: space-between; padding-top: 6px; font-size: 12px"><span>1</span><span>8</span><span>15</span><span>22</span><span>31</span></div>
+            </div>
+          </section>
+
+          <section class="card" style="display: flex; flex-direction: column; gap: 10px">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px">
+              <h2 class="h2">Latest records</h2>
+              <a href="records.html" style="display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; text-decoration: underline; text-underline-offset: 4px">All records</a>
+            </div>
+            <div style="display: flex; flex-direction: column">
+              <sc-for list="{{ latest }}" as="r">
+                <a href="records.html" class="row" style="grid-template-columns: 10px minmax(0, 1fr) auto; min-height: 56px">
+                  <span class="swatch" style="background: {{ r.color }}"></span>
+                  <span style="display: flex; flex-direction: column; min-width: 0"><span class="clip" style="font-weight: 600">{{ r.name }}</span><span class="t3 clip">{{ r.meta }}</span></span>
+                  <span class="tnum" style="font-weight: 650">{{ r.amount }}</span>
+                </a>
+              </sc-for>
+            </div>
+          </section>
+        </div>
+
+      </main>
+    </div>
+  </template>
+  <div id="app"></div>
+
+  <script src="prototype.js"></script>
+  <script src="parts/record-form.js"></script>
+  <script src="parts/app-nav.js"></script>
+  <script>
+  class Component extends DCLogic {
+    state = { day: 25, open: 'food', hover: null };
+
+    renderVals() {
+      const theme = this.props.theme === 'dark' ? 'dark' : 'light';
+      const money = (n) => (n < 0 ? '−' : '') + '€' + Math.abs(n).toLocaleString('en-IE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+      const out = [1020, 41.85, 118, 24.5, 56.2, 138, 89.3, 0, 24, 23.4, 12.99, 84.15, 46, 58.1, 38.5, 68, 22, 31.25, 12.8, 123.76, 61, 59.2, 44.05, 52.3, 0];
+      const inc = { 12: 170, 25: 3280 };
+      const fx = { 22: -1.67 };
+      const opening = 8136.47;
+      const bal = [];
+      let b = opening;
+      out.forEach((v, i) => { b = b - v + (inc[i + 1] || 0) + (fx[i + 1] || 0); bal.push(Math.round(b * 100) / 100); });
+
+      const lo = 5400, hi = 9900;
+      const yPct = (v) => (hi - v) / (hi - lo) * 100;
+      const y = (v) => (yPct(v) * 1.5).toFixed(1);
+      let path = 'M0 ' + y(opening);
+      bal.forEach((v, i) => { path += ' V' + y(v) + ' H' + (i + 1) * 20; });
+
+      const day = this.state.day;
+      const wd = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      const picked = {
+        date: wd[(day - 1) % 7] + ' ' + day + ' Nov',
+        balance: money(bal[day - 1]),
+        in: money(inc[day] || 0),
+        out: money(out[day - 1]),
+        left: ((day - 1) / 30 * 100).toFixed(3),
+        mid: ((day - 0.5) / 30 * 100).toFixed(3),
+        top: yPct(bal[day - 1]).toFixed(2)
+      };
+      const days = Array.from({ length: 30 }, (_, i) => {
+        const n = i + 1, sel = n === day, future = n > 25;
+        return {
+          n, sel, future,
+          label: n + ' November',
+          bg: sel ? 'var(--on-hero)' : 'transparent',
+          fg: sel ? 'var(--hero)' : (future ? 'var(--hero-mute)' : 'var(--on-hero)'),
+          weight: sel ? 700 : 550,
+          pick: () => this.setState({ day: n })
+        };
+      });
+
+      const total = 2249.35;
+      const raw = [
+        ['housing', 'Housing', 1180, 1180, [['Rent', 1020], ['Energy', 118], ['Internet', 42]]],
+        ['food', 'Food', 428.6, 476.9, [['Groceries', 296.4], ['Restaurants', 132.2]]],
+        ['shopping', 'Shopping', 187.9, 171.3, [['Clothing', 89.9], ['Online orders', 64.2], ['Home', 33.8]]],
+        ['transport', 'Transport', 164.5, 162, [['Public transport', 96.5], ['Car share', 68]]],
+        ['health', 'Health', 138, 138, [['Insurance', 138]]],
+        ['leisure', 'Leisure', 112.35, 189.2, [['Going out', 65.5], ['Books', 33.86], ['Subscriptions', 12.99]]],
+        ['other', 'Credit card bill', 38, 44, [['November statement', 38]]]
+      ];
+      const openId = this.state.open;
+      const cats = raw.map(([id, name, v, prev, subs]) => {
+        const d = Math.round((v - prev) * 100) / 100;
+        return {
+          id, name, v,
+          color: 'var(--cat-' + id + ')',
+          amount: money(v),
+          share: Math.round(v / total * 100) + '%',
+          change: d === 0 ? 'no change' : money(Math.abs(d)) + (d < 0 ? ' less' : ' more'),
+          open: openId === id,
+          dim: openId && openId !== id ? 0.4 : 1,
+          toggle: () => this.setState({ open: openId === id ? null : id }),
+          subs: subs.map(([n, a]) => ({ name: n, amount: money(a) }))
+        };
+      });
+
+      const budgets = [['food', 'Food', 428.6, 500], ['transport', 'Transport', 164.5, 180], ['shopping', 'Shopping', 187.9, 150], ['leisure', 'Leisure', 112.35, 160]].map(([id, name, spent, limit]) => ({
+        name,
+        color: 'var(--cat-' + id + ')',
+        limit: '€' + limit,
+        fill: (Math.min(spent, limit) / limit / 1.3 * 100).toFixed(2),
+        over: (Math.max(0, spent - limit) / limit / 1.3 * 100).toFixed(2),
+        left: spent > limit ? money(spent - limit) + ' over' : money(limit - spent) + ' left',
+        tone: spent > limit ? 'var(--over-text)' : 'var(--text)'
+      }));
+
+      const accounts = [
+        ['ING Checking', 'Checking', '€3,486.15', 'Reconciled 31 Oct'],
+        ['bunq Savings', 'Savings', '€4,200.00', 'Reconciled 31 Oct'],
+        ['bunq Travel', 'Savings', '€610.00', 'Reconciled 31 Oct'],
+        ['Wise USD', 'Wallet', '€780.00', '$842.40'],
+        ['Revolut EUR', 'Wallet', '€164.30', 'Reconciled 31 Oct'],
+        ['Cash', 'Cash', '€95.00', 'Counted 31 Oct']
+      ].map(([name, type, amount, note]) => ({ name, type, amount, note }));
+
+      const oct = [1020, 38.2, 71.4, 0, 118, 24, 42, 138, 52.6, 18.3, 96.5, 0, 44.1, 27, 61.75, 134, 22, 39.9, 88.45, 0, 31.6, 74.8, 119.9, 46.3, 52.6, 12.4, 0, 33.5, 24.5, 40, 0];
+      const sum = (xs) => { let t = 0; return xs.map((v) => (t = Math.round((t + v) * 100) / 100)); };
+      const cn = sum(out), co = sum(oct);
+      const line = (xs) => xs.map((v, i) => (i ? 'L' : 'M') + (i / 30 * 310).toFixed(1) + ' ' + ((2500 - v) / 10).toFixed(1)).join(' ');
+      const hi2 = this.state.hover === null ? 24 : this.state.hover;
+      const diff = Math.round((cn[hi2] - co[hi2]) * 100) / 100;
+      const cum = {
+        nov: line(cn), oct: line(co),
+        x: (hi2 / 30 * 100).toFixed(2),
+        y: ((2500 - cn[hi2]) / 25).toFixed(2),
+        headline: diff === 0 ? 'Same as October' : money(Math.abs(diff)) + (diff < 0 ? ' less' : ' more'),
+        sub: 'By the ' + (hi2 + 1) + ([, 'st', 'nd', 'rd'][(hi2 + 1) % 10 < 4 && (hi2 + 1 < 10 || hi2 + 1 > 20) ? (hi2 + 1) % 10 : 0] || 'th') + ': ' + money(cn[hi2]) + ' now, ' + money(co[hi2]) + ' in October',
+        move: (e) => {
+          const r = e.currentTarget.getBoundingClientRect();
+          const i = Math.round((e.clientX - r.left) / r.width * 30);
+          this.setState({ hover: Math.max(0, Math.min(24, i)) });
+        },
+        leave: () => this.setState({ hover: null })
+      };
+
+      const latest = [
+        ['other', 'Transfer to bunq Savings', '25 Nov, ING Checking', '€400.00'],
+        ['in', 'Salary, Brinkhof BV', '25 Nov, ING Checking', '+€3,280.00'],
+        ['food', 'Albert Heijn', '24 Nov, Groceries', '−€34.25'],
+        ['shopping', 'HEMA', '24 Nov, Home', '−€18.05'],
+        ['other', 'Credit card bill', '23 Nov, ING Checking', '−€38.00'],
+        ['shopping', 'Refund from Bol', '23 Nov, Online orders', '+€19.95']
+      ].map(([id, name, meta, amount]) => ({ name, meta, amount, color: id === 'in' ? 'var(--in)' : 'var(--cat-' + id + ')' }));
+
+      return {
+        theme, yes: true,
+        cls: theme === 'light' ? 'ex ex-light' : 'ex',
+        grid: { a: yPct(8000).toFixed(2), b: yPct(6000).toFixed(2) },
+        path, picked, days, cats, budgets, accounts, cum, latest
+      };
+    }
+  }
+
+    Prototype.screen(Component);
+  </script>
+</body>
+</html>
