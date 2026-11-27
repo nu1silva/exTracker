@@ -65,7 +65,8 @@ export function useAuthForm() {
     await navigate(next, { replace: true });
   }
 
-  // Someone who is already signed in has no business here.
-  const redirect = me.data ? <Navigate to={next} replace /> : null;
+  // Someone who is already signed in has no business here. isSuccess, not data: after a 401 the
+  // query still holds the previous user, and RequireUser would send them straight back here.
+  const redirect = me.isSuccess ? <Navigate to={next} replace /> : null;
   return { error, setError, pending, submit, redirect };
 }
