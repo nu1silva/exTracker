@@ -1,0 +1,9 @@
+**/node_modules
+**/dist
+**/*.tsbuildinfo
+**/coverage
+.git
+.env
+.env.*
+src/designs
+**/.DS_Store

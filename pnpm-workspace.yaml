@@ -1,0 +1,28 @@
+packages:
+  - apps/*
+  - packages/*
+
+engineStrict: true
+
+# One pinned version per dependency, used through "catalog:" in each package.json.
+catalog:
+  '@tanstack/react-query': 5.108.4
+  '@types/node': 26.6.11
+  '@types/pg': 8.23.1
+  '@types/react': 19.3.3
+  '@types/react-dom': 19.3.0
+  '@vitejs/plugin-react': 6.3.0
+  drizzle-kit: 0.31.11
+  drizzle-orm: 0.45.4
+  fastify: 5.12.8
+  pg: 8.23.1
+  react: 19.3.1
+  react-dom: 19.3.1
+  typescript: 7.0.2
+  vite: 8.4.0
+  vitest: 5.1.2
+  zod: 4.6.7
+
+# esbuild (pulled in by drizzle-kit) only checks its binary in its install script; the binary comes from npm.
+allowBuilds:
+  esbuild: false
