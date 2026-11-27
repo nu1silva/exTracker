@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Add record · exTracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&amp;display=swap">
+  <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="components.css">
+</head>
+<body>
+  <template id="screen">
+    <div class="{{ cls }}" style="display: flex; justify-content: center; min-height: 100vh">
+      <div style="width: min(480px, 100%)">
+        <dc-import name="RecordForm" theme="{{ theme }}" on-close="{{ close }}"></dc-import>
+      </div>
+    </div>
+  </template>
+  <div id="app"></div>
+
+  <script src="prototype.js"></script>
+  <script src="parts/record-form.js"></script>
+  <script>
+    class Component extends DCLogic {
+      renderVals() {
+        const theme = this.props.theme === 'dark' ? 'dark' : 'light';
+        return {
+          theme, cls: theme === 'light' ? 'ex ex-light' : 'ex',
+          close: () => { location.href = 'dashboard.html'; }
+        };
+      }
+    }
+
+    Prototype.screen(Component);
+  </script>
+</body>
+</html>

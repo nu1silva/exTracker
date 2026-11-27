@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Settings · exTracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&amp;display=swap">
+  <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="components.css">
+</head>
+<body>
+  <template id="screen">
+    <div class="{{ cls }}" style="min-height: 100vh">
+      <dc-import name="AppNav" active="settings" theme="{{ theme }}"></dc-import>
+      <main class="page">
+
+        <h1 class="h1">Settings</h1>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 24px 40px; align-items: flex-start">
+          <nav aria-label="Settings sections" style="flex: 1 1 200px; display: flex; flex-wrap: wrap; gap: 2px 4px">
+            <a class="row" href="#profile" style="display: flex; min-height: 44px; margin: 0; width: 100%; font-weight: 600">Profile</a>
+            <a class="row" href="#appearance" style="display: flex; min-height: 44px; margin: 0; width: 100%; font-weight: 600">Appearance</a>
+            <a class="row" href="#categories" style="display: flex; min-height: 44px; margin: 0; width: 100%; font-weight: 600">Categories</a>
+            <a class="row" href="#currencies" style="display: flex; min-height: 44px; margin: 0; width: 100%; font-weight: 600">Currencies</a>
+            <a class="row" href="#security" style="display: flex; min-height: 44px; margin: 0; width: 100%; font-weight: 600">Security</a>
+            <a class="row" href="#data" style="display: flex; min-height: 44px; margin: 0; width: 100%; font-weight: 600">Your data</a>
+          </nav>
+
+          <div style="flex: 999 1 640px; min-width: 0; max-width: 960px; display: flex; flex-direction: column; gap: 24px">
+
+            <section id="profile" class="card" style="display: flex; flex-direction: column; gap: 20px; padding: 28px">
+              <h2 class="h2">Profile</h2>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 18px 20px">
+                <label class="label">Name
+                  <input class="field" value="{{ name }}" onChange="{{ setName }}">
+                </label>
+                <label class="label">Email
+                  <input class="field" type="email" value="{{ email }}" onChange="{{ setEmail }}">
+                </label>
+                <label class="label">Base currency
+                  <select class="field"><option>Euro (EUR)</option><option>US dollar (USD)</option><option>British pound (GBP)</option></select>
+                </label>
+                <label class="label">Time zone
+                  <select class="field"><option>Europe/Amsterdam</option><option>Europe/London</option><option>Europe/Berlin</option></select>
+                </label>
+              </div>
+              <div style="display: flex; align-items: center; gap: 16px"><button type="button" class="btn btn-primary" onClick="{{ save }}">Save profile</button><span aria-live="polite" style="color: var(--ok-text); font-weight: 600">{{ savedNote }}</span></div>
+            </section>
+
+            <section id="appearance" class="card" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 24px; padding: 28px">
+              <div style="display: flex; flex-direction: column; gap: 4px"><h2 class="h2">Appearance</h2><span class="t2">Applies on this device.</span></div>
+              <div class="seg" role="group" aria-label="Theme">
+                <button type="button" aria-pressed="{{ isLight }}" onClick="{{ goLight }}">Light</button>
+                <button type="button" aria-pressed="{{ isDark }}" onClick="{{ goDark }}">Dark</button>
+              </div>
+            </section>
+
+            <section id="categories" class="card" style="display: flex; flex-direction: column; gap: 14px; padding: 28px">
+              <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px">
+                <div style="display: flex; flex-direction: column; gap: 4px"><h2 class="h2">Categories</h2><span class="t2">Each category keeps its color in every chart.</span></div>
+                <button type="button" class="btn">Add category</button>
+              </div>
+              <ul>
+                <sc-for list="{{ cats }}" as="c">
+                  <li style="display: grid; grid-template-columns: 14px minmax(0, 1fr) auto; gap: 14px; align-items: center; min-height: 64px; border-top: 1px solid var(--line)">
+                    <span class="swatch" style="width: 14px; height: 14px; background: {{ c.color }}"></span>
+                    <span style="display: flex; flex-direction: column; min-width: 0; padding: 8px 0"><span style="font-weight: 650">{{ c.name }}</span><span class="t3">{{ c.subs }}</span></span>
+                    <button type="button" class="btn" aria-label="{{ c.label }}">{{ c.action }}</button>
+                  </li>
+                </sc-for>
+              </ul>
+            </section>
+
+            <section id="currencies" class="card" style="display: flex; flex-direction: column; gap: 14px; padding: 28px">
+              <div style="display: flex; flex-direction: column; gap: 4px"><h2 class="h2">Currencies</h2><span class="t2">Balances in other currencies are shown in euros at the latest European Central Bank rate.</span></div>
+              <div style="display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px; align-items: center; min-height: 68px; border-top: 1px solid var(--line)">
+                <span style="display: flex; flex-direction: column"><span class="tnum" style="font-weight: 650">1 EUR = 1.0800 USD</span><span class="t3">ECB, 24 November 2026. Used by Wise USD.</span></span>
+                <button type="button" class="btn">Set own rate</button>
+              </div>
+            </section>
+
+            <section id="security" class="card" style="display: flex; flex-direction: column; gap: 14px; padding: 28px">
+              <h2 class="h2">Security</h2>
+              <div style="display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px; align-items: center; min-height: 68px; border-top: 1px solid var(--line)">
+                <span style="display: flex; flex-direction: column"><span id="two-step" style="font-weight: 650">Two-step sign-in</span><span class="t3">{{ totpNote }}</span></span>
+                <button type="button" role="switch" aria-checked="{{ totp }}" aria-labelledby="two-step" onClick="{{ toggleTotp }}" style="display: flex; align-items: center; justify-content: center; width: 64px; height: 44px; padding: 0; border: 0; border-radius: 12px; background: transparent"><span style="position: relative; display: block; width: 52px; height: 30px; border-radius: 15px; background: {{ swBg }}; border: 1px solid {{ swBorder }}"><span style="position: absolute; top: 3px; left: {{ swLeft }}px; width: 22px; height: 22px; border-radius: 50%; background: {{ swKnob }}; transition: left 0.15s"></span></span></button>
+              </div>
+              <div style="display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px; align-items: center; min-height: 68px; border-top: 1px solid var(--line)">
+                <span style="font-weight: 650">Password</span>
+                <button type="button" class="btn">Change password</button>
+              </div>
+            </section>
+
+            <section id="data" class="card" style="display: flex; flex-direction: column; gap: 14px; padding: 28px">
+              <h2 class="h2">Your data</h2>
+              <div style="display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px; align-items: center; min-height: 68px; border-top: 1px solid var(--line)">
+                <span style="display: flex; flex-direction: column"><span style="font-weight: 650">Export everything</span><span class="t3">All records, accounts, categories and budgets as CSV files.</span></span>
+                <button type="button" class="btn">Export</button>
+              </div>
+              <div style="display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px; align-items: center; min-height: 68px; border-top: 1px solid var(--line)">
+                <span style="display: flex; flex-direction: column"><span style="font-weight: 650">Delete account</span><span class="t3">Removes your sign-in and all records. This cannot be undone.</span></span>
+                <button type="button" class="btn btn-danger">Delete account</button>
+              </div>
+            </section>
+
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </template>
+  <div id="app"></div>
+
+  <script src="prototype.js"></script>
+  <script src="parts/record-form.js"></script>
+  <script src="parts/app-nav.js"></script>
+  <script>
+  class Component extends DCLogic {
+    state = { name: 'Sam de Vries', email: 'sam@example.com', saved: false, totp: true };
+
+    renderVals() {
+      const s = this.state;
+      const theme = this.props.theme === 'dark' ? 'dark' : 'light';
+      const cats = [
+        ['housing', 'Housing', 'Rent, Energy, Internet'],
+        ['food', 'Food', 'Groceries, Restaurants'],
+        ['shopping', 'Shopping', 'Clothing, Online orders, Home'],
+        ['transport', 'Transport', 'Public transport, Car share'],
+        ['health', 'Health', 'Insurance'],
+        ['leisure', 'Leisure', 'Going out, Books, Subscriptions'],
+        ['other', 'Credit card bill', 'Built in, can be renamed'],
+        ['in', 'Income', 'Salary, Other income']
+      ].map(([id, name, subs]) => ({
+        name, subs,
+        color: id === 'in' ? 'var(--in)' : 'var(--cat-' + id + ')',
+        action: id === 'other' ? 'Rename' : 'Edit',
+        label: (id === 'other' ? 'Rename ' : 'Edit ') + name
+      }));
+      return {
+        theme, cls: theme === 'light' ? 'ex ex-light' : 'ex',
+        isDark: theme === 'dark', isLight: theme === 'light',
+        goDark: () => this.props.setTheme('dark'),
+        goLight: () => this.props.setTheme('light'),
+        name: s.name, setName: (e) => this.setState({ name: e.target.value, saved: false }),
+        email: s.email, setEmail: (e) => this.setState({ email: e.target.value, saved: false }),
+        save: () => this.setState({ saved: true }),
+        savedNote: s.saved ? 'Profile saved' : '',
+        cats,
+        totp: s.totp,
+        totpNote: s.totp ? 'On. You confirm each sign-in with your authenticator app.' : 'Off. Only your password protects this account.',
+        toggleTotp: () => this.setState({ totp: !s.totp }),
+        swBg: s.totp ? 'var(--brand)' : 'transparent',
+        swBorder: s.totp ? 'var(--brand)' : 'var(--line-2)',
+        swLeft: s.totp ? 25 : 3,
+        swKnob: s.totp ? 'var(--on-brand)' : 'var(--text-3)'
+      };
+    }
+  }
+
+    Prototype.screen(Component);
+  </script>
+</body>
+</html>

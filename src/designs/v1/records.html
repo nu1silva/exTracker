@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Records · exTracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&amp;display=swap">
+  <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="components.css">
+</head>
+<body>
+  <template id="screen">
+    <div class="{{ cls }}" style="min-height: 100vh">
+      <dc-import name="AppNav" active="records" theme="{{ theme }}"></dc-import>
+      <main class="page">
+
+        <div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 20px 32px">
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <h1 class="h1">Records</h1>
+            <span class="t2 tnum" aria-live="polite">{{ summary }}</span>
+          </div>
+          <button type="button" class="btn"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v8m0 0 3-3m-3 3L5 7M2.5 13.5h11"></path></svg>Export CSV</button>
+        </div>
+
+        <div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 14px">
+          <label class="label" style="flex: 0 1 190px">Period
+            <select class="field"><option>16 to 25 Nov 2026</option><option>November 2026</option><option>October 2026</option><option>This year</option><option>Custom range</option></select>
+          </label>
+          <label class="label" style="flex: 0 1 190px">Account
+            <select class="field" value="{{ account }}" onChange="{{ setAccount }}"><option value="">All accounts</option><option>ING Checking</option><option>bunq Savings</option><option>Wise USD</option><option>Revolut EUR</option><option>Cash</option></select>
+          </label>
+          <label class="label" style="flex: 1 1 220px">Search
+            <input class="field" type="search" placeholder="Shop, category or note" value="{{ query }}" onChange="{{ setQuery }}">
+          </label>
+          <div class="seg" role="group" aria-label="Kind of record">
+            <sc-for list="{{ kinds }}" as="k">
+              <button type="button" aria-pressed="{{ k.on }}" onClick="{{ k.pick }}">{{ k.name }}</button>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+          <section class="card" aria-label="Record list" style="flex: 999 1 620px; display: flex; flex-direction: column; gap: 22px">
+            <sc-for list="{{ groups }}" as="g">
+              <div>
+                <div style="display: flex; justify-content: space-between; gap: 16px; padding-bottom: 6px; margin-bottom: 4px; border-bottom: 1px solid var(--line)"><h2 class="h2" style="font-size: 14px">{{ g.day }}</h2><span class="t2 tnum">{{ g.total }}</span></div>
+                <sc-for list="{{ g.items }}" as="r">
+                  <button type="button" class="row rec" aria-pressed="{{ r.on }}" onClick="{{ r.pick }}">
+                    <span class="swatch" style="background: {{ r.color }}"></span>
+                    <span class="clip" style="font-weight: 600">{{ r.name }}</span>
+                    <span class="clip t2">{{ r.cat }}</span>
+                    <span class="clip t2">{{ r.acct }}</span>
+                    <span class="tnum right" style="font-weight: 650">{{ r.amount }}</span>
+                  </button>
+                </sc-for>
+              </div>
+            </sc-for>
+            <sc-if value="{{ none }}">
+              <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 12px; padding: 20px 0">
+                <strong style="font-size: 16px">No records match these filters</strong>
+                <button type="button" class="btn" onClick="{{ clear }}">Clear filters</button>
+              </div>
+            </sc-if>
+          </section>
+
+          <aside class="card" aria-label="Selected record" style="flex: 1 1 360px; display: flex; flex-direction: column; gap: 22px">
+            <div style="display: flex; flex-direction: column; gap: 6px">
+              <span class="t3">{{ sel.kind }}</span>
+              <h2 class="h2" style="font-size: 20px">{{ sel.name }}</h2>
+              <span class="figure" style="font-size: 38px">{{ sel.amount }}</span>
+            </div>
+            <sc-if value="{{ sel.hasLines }}">
+              <div style="display: flex; flex-direction: column; gap: 10px; padding: 16px; border-radius: 14px; background: var(--raised)">
+                <span class="t3" style="font-weight: 600">Split across 2 categories</span>
+                <div style="display: flex; gap: 2px; height: 14px">
+                  <sc-for list="{{ sel.lines }}" as="l"><span style="flex: {{ l.v }} 1 0; border-radius: 4px; background: {{ l.color }}"></span></sc-for>
+                </div>
+                <sc-for list="{{ sel.lines }}" as="l">
+                  <div style="display: grid; grid-template-columns: 10px minmax(0, 1fr) auto; gap: 12px; align-items: center"><span class="swatch" style="background: {{ l.color }}"></span><span>{{ l.name }}</span><span class="tnum" style="font-weight: 650">{{ l.amount }}</span></div>
+                </sc-for>
+              </div>
+            </sc-if>
+            <dl style="margin: 0; display: flex; flex-direction: column">
+              <sc-for list="{{ sel.facts }}" as="f">
+                <div style="display: grid; grid-template-columns: 104px minmax(0, 1fr); gap: 12px; padding: 10px 0; border-top: 1px solid var(--line)"><dt class="t2">{{ f.k }}</dt><dd class="tnum" style="margin: 0; font-weight: 550">{{ f.v }}</dd></div>
+              </sc-for>
+            </dl>
+            <div style="display: flex; flex-wrap: wrap; gap: 10px">
+              <button type="button" class="btn">Edit</button>
+              <sc-if value="{{ sel.canRefund }}"><button type="button" class="btn">Add refund</button></sc-if>
+              <button type="button" class="btn btn-danger" style="margin-left: auto">Delete</button>
+            </div>
+          </aside>
+        </div>
+
+      </main>
+    </div>
+  </template>
+  <div id="app"></div>
+
+  <script src="prototype.js"></script>
+  <script src="parts/record-form.js"></script>
+  <script src="parts/app-nav.js"></script>
+  <script>
+  class Component extends DCLogic {
+    state = { kind: 'All', account: '', query: '', id: 11 };
+
+    renderVals() {
+      const s = this.state;
+      const theme = this.props.theme === 'dark' ? 'dark' : 'light';
+      const money = (n) => (n < 0 ? '−' : '') + '€' + Math.abs(n).toLocaleString('en-IE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      const color = (c) => c === 'in' ? 'var(--in)' : 'var(--cat-' + c + ')';
+
+      const all = [
+        [1, 25, 'Transfer', 'Transfer to bunq Savings', 'Transfer', 'other', 'ING Checking', 400, { To: 'bunq Savings' }],
+        [2, 25, 'Income', 'Salary, Brinkhof BV', 'Salary', 'in', 'ING Checking', 3280],
+        [3, 24, 'Expense', 'Albert Heijn', 'Groceries', 'food', 'ING Checking', -34.25],
+        [4, 24, 'Expense', 'HEMA', 'Home', 'shopping', 'ING Checking', -18.05],
+        [5, 23, 'Expense', 'Credit card bill', 'Credit card bill', 'other', 'ING Checking', -38],
+        [6, 23, 'Refund', 'Refund from Bol', 'Online orders', 'shopping', 'ING Checking', 19.95, { 'Refund of': 'Bol, 12 Nov, €84.15' }],
+        [7, 23, 'Expense', 'NS', 'Public transport', 'transport', 'ING Checking', -26],
+        [8, 22, 'Expense', 'Dinner, Bar Brouw', 'Restaurants', 'food', 'Revolut EUR', -59.2],
+        [9, 22, 'Transfer', 'Transfer to Wise USD', 'Transfer', 'other', 'ING Checking', 500, { To: 'Wise USD', Received: '$538.20', 'Your rate': '1 EUR = 1.0764 USD' }],
+        [11, 21, 'Expense', 'Albert Heijn', 'Groceries and Home', 'food', 'ING Checking', -61],
+        [12, 20, 'Expense', 'Uniqlo', 'Clothing', 'shopping', 'ING Checking', -89.9],
+        [13, 20, 'Expense', 'Boekhandel Donner', 'Books', 'leisure', 'Revolut EUR', -33.86],
+        [14, 19, 'Expense', 'Lunch, market', 'Restaurants', 'food', 'Cash', -12.8],
+        [15, 18, 'Expense', 'Albert Heijn', 'Groceries', 'food', 'ING Checking', -31.25],
+        [16, 17, 'Expense', 'NS', 'Public transport', 'transport', 'ING Checking', -22],
+        [17, 16, 'Expense', 'Greenwheels', 'Car share', 'transport', 'ING Checking', -68]
+      ].map(([id, day, kind, name, cat, c, acct, amt, extra]) => ({ id, day, kind, name, cat, c, acct, amt, extra: extra || {} }));
+
+      const label = (r) => r.kind === 'Transfer' ? money(r.amt) : (r.amt > 0 ? '+' : '') + money(r.amt);
+      const q = s.query.trim().toLowerCase();
+      const shown = all.filter((r) =>
+        (s.kind === 'All' || r.kind === s.kind) &&
+        (!s.account || r.acct === s.account || r.extra.To === s.account) &&
+        (!q || (r.name + ' ' + r.cat + ' ' + r.acct).toLowerCase().includes(q)));
+
+      const total = (xs, kinds) => Math.round(xs.filter((r) => kinds.includes(r.kind)).reduce((t, r) => t + r.amt, 0) * 100) / 100;
+      const wd = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const groups = [];
+      shown.forEach((r) => {
+        let g = groups.find((x) => x.n === r.day);
+        if (!g) { g = { n: r.day, day: wd[(r.day - 1) % 7] + ' ' + r.day + ' November', rows: [], items: [] }; groups.push(g); }
+        g.rows.push(r);
+        g.items.push({ name: r.name, cat: r.cat, acct: r.acct, color: color(r.c), amount: label(r), on: r.id === s.id, pick: () => this.setState({ id: r.id }) });
+      });
+      groups.forEach((g) => {
+        const i = total(g.rows, ['Income']), o = -total(g.rows, ['Expense', 'Refund']);
+        g.total = [i ? 'In ' + money(i) : '', o ? 'Out ' + money(o) : ''].filter(Boolean).join(', ');
+      });
+
+      const r = all.find((x) => x.id === s.id);
+      const lines = r.id === 11 ? [
+        { name: 'Groceries', v: 45.25, amount: '€45.25', color: color('food') },
+        { name: 'Home', v: 15.75, amount: '€15.75', color: color('shopping') }
+      ] : [];
+      const facts = [
+        { k: 'Date', v: wd[(r.day - 1) % 7] + ' ' + r.day + ' November 2026' },
+        { k: r.kind === 'Transfer' ? 'From' : 'Account', v: r.acct }
+      ];
+      Object.keys(r.extra).forEach((k) => facts.push({ k, v: r.extra[k] }));
+      if (r.kind !== 'Transfer' && !lines.length) facts.push({ k: 'Category', v: r.cat });
+      facts.push({ k: 'Bank check', v: 'Not reconciled yet' });
+
+      const n = shown.length;
+      return {
+        theme, cls: theme === 'light' ? 'ex ex-light' : 'ex',
+        summary: n + (n === 1 ? ' record' : ' records') + '. In ' + money(total(shown, ['Income'])) + ', out ' + money(-total(shown, ['Expense', 'Refund'])) + '. Transfers are not counted.',
+        kinds: ['All', 'Expense', 'Income', 'Transfer', 'Refund'].map((name) => ({ name, on: s.kind === name, pick: () => this.setState({ kind: name }) })),
+        account: s.account, setAccount: (e) => this.setState({ account: e.target.value }),
+        query: s.query, setQuery: (e) => this.setState({ query: e.target.value }),
+        clear: () => this.setState({ kind: 'All', account: '', query: '' }),
+        none: n === 0,
+        groups,
+        sel: { kind: r.kind, name: r.name, amount: label(r), hasLines: lines.length > 0, lines, facts, canRefund: r.kind === 'Expense' }
+      };
+    }
+  }
+
+    Prototype.screen(Component);
+  </script>
+</body>
+</html>
