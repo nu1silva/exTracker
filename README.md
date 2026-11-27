@@ -35,7 +35,7 @@ Open http://localhost:8080. The page shows the API and database status.
 
 Startup order: `db` becomes healthy, `migrate` applies pending migrations and exits with
 code 0, then `api` starts, then `web`. nginx in `web` serves the app and proxies `/api/*` to
-the API, so `/api/health` reaches the API's `GET /health`.
+the API with the path unchanged: the API serves every route under `/api`.
 
 ```sh
 curl http://localhost:8080/api/health    # {"status":"ok","database":"up"}, or HTTP 503 with "down"
@@ -87,7 +87,7 @@ Run Postgres 17 yourself, set `DATABASE_URL` (and optionally `API_HOST=127.0.0.1
 
 ```sh
 pnpm db:migrate
-pnpm dev:api    # http://localhost:3000/health, restarts on changes
+pnpm dev:api    # http://localhost:3000/api/health, restarts on changes
 pnpm dev:web    # http://localhost:5173, proxies /api to the API
 ```
 

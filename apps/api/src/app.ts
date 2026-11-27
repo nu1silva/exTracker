@@ -14,7 +14,7 @@ export function buildApp(dependencies: AppDependencies, options: FastifyServerOp
   const app = Fastify(options);
 
   app.get(
-    '/health',
+    '/api/health',
     { schema: { response: { 200: healthJsonSchema, 503: healthJsonSchema } } },
     async (request, reply) => {
       const databaseUp = await dependencies.checkDatabase().then(

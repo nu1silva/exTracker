@@ -7,9 +7,9 @@ server {
     root /usr/share/nginx/html;
     index index.html;
 
-    # /api/health is sent to the API as /health.
+    # No path after the upstream, so the request path reaches the API unchanged (/api/...).
     location /api/ {
-        proxy_pass ${API_UPSTREAM}/;
+        proxy_pass ${API_UPSTREAM};
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;

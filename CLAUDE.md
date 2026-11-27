@@ -64,9 +64,10 @@ docker compose up --build                             # full stack on http://loc
   `renderToStaticMarkup`, and functions that call the network take a `fetchImpl` argument.
   Keep fetching out of components (`health.ts` fetches, `HealthStatus.tsx` only renders) so
   both stay testable this way.
-- **Requests from the browser go to `/api/*`.** nginx (Docker) and the Vite dev server both
-  remove the `/api` prefix, so the browser's `/api/health` reaches the API's `GET /health`.
-  Only the web app is published on the host.
+- **Every API route lives under `/api`.** nginx (Docker) and the Vite dev server pass `/api/*`
+  through unchanged, so the browser's `/api/health` is the API's `GET /api/health`. Never strip
+  the prefix in a proxy: Better Auth builds its links from `APP_URL` and `/api/auth`. Only the
+  web app is published on the host.
 
 ## Conventions
 

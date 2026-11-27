@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { healthResponseSchema } from '@extracker/shared';
 import { buildApp } from '../src/app.ts';
 
-describe('GET /health', () => {
+describe('GET /api/health', () => {
   let app: ReturnType<typeof buildApp> | undefined;
 
   afterEach(async () => {
@@ -11,7 +11,7 @@ describe('GET /health', () => {
 
   it('returns 200 when the database answers', async () => {
     app = buildApp({ checkDatabase: async () => {} });
-    const response = await app.inject({ method: 'GET', url: '/health' });
+    const response = await app.inject({ method: 'GET', url: '/api/health' });
 
     expect(response.statusCode).toBe(200);
     expect(healthResponseSchema.parse(response.json())).toEqual({ status: 'ok', database: 'up' });
@@ -23,7 +23,7 @@ describe('GET /health', () => {
         throw new Error('connection refused');
       },
     });
-    const response = await app.inject({ method: 'GET', url: '/health' });
+    const response = await app.inject({ method: 'GET', url: '/api/health' });
 
     expect(response.statusCode).toBe(503);
     expect(healthResponseSchema.parse(response.json())).toEqual({ status: 'error', database: 'down' });
