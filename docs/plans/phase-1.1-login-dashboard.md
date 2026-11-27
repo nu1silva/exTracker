@@ -1,6 +1,6 @@
 # Phase 1.1: Sign-in and a blank dashboard
 
-- **Status:** Draft, revised after review
+- **Status:** Implemented. See "Notes from building it" at the end for where the code differs
 - **Date:** 2026-11-27
 - **Branch:** `feature/login_dashboard`
 
@@ -421,3 +421,33 @@ In development, run Postgres, `pnpm db:migrate`, `pnpm dev:api` and `pnpm dev:we
   sends, and the API tests cover it.
 - **Write requests must carry `Origin`.** `requireSession` refuses writes without an `Origin` header.
   Browsers always send one on these requests, but scripts such as `curl` must add it.
+
+## Notes from building it
+
+Built with better-auth, the `auth` CLI and react-router at the latest releases (1.7.28 and 8.5.3),
+because the internals above were checked against 1.7.28. Where the code differs from this plan:
+
+- **Migrations read only `DATABASE_URL`.** `migrate.ts` used `loadConfig()`, which now requires
+  `APP_URL` and `AUTH_SECRET`. `loadMigrateConfig()` parses only the database URL, so the
+  `migrate` service needs no auth secret.
+- **`APP_URL` must be an origin.** `config.ts` refuses a path, query or credentials, and drops a
+  trailing slash, because the app is served at the root.
+- **The origin check stays on in tests.** Better Auth skips its origin check when it detects a test
+  run (`isTest()` in `context/create-context.mjs`). `createAuth` sets
+  `advanced.disableOriginCheck: false`; without it, the sign-out origin test passed for the wrong
+  reason.
+- **The auth route passes the body bytes through** instead of rebuilding JSON. This handles the
+  empty `POST` (curl) and removes the "only JSON requests work" risk. `better-auth/client` itself
+  sends sign-out as a JSON `POST` with body `{}`; the tests cover both.
+- **The Drizzle adapter runs with `transaction: true`**, so sign-up writes the user and the
+  password row together or not at all.
+- **`resetPassword()` checks for a password sign-in first.** `internalAdapter.updatePassword`
+  silently does nothing when the user has none.
+- **Our routes answer errors as `{ code, message }` everywhere**, including Fastify's own
+  validation, 404 and 500 errors, through the error and not-found handlers in `app.ts`.
+- **Zod runs jitless in the browser.** Zod 4 calls `new Function()` when a schema is defined, to see
+  whether it may compile parsers. The CSP refuses that and the browser logged an error on every
+  load. `apps/web/src/zod-config.ts` turns it off and is the first import of `main.tsx`.
+- **Form errors are not red**, following the designs' rule that red is only for over the limit and
+  for deleting.
+- **Scripts added for convenience:** root `auth:generate` and `auth:check`, next to `db:generate`.

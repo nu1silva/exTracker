@@ -2,20 +2,18 @@
 
 An open-source personal expense tracker, built to be multi-user.
 
-This is the project skeleton. It has a health check end to end (database, API, web app)
-and no expense features yet. Screen designs for the planned app are in
-[src/designs/v1](src/designs/v1/README.md).
+So far you can create an account, sign in and out, and see an empty dashboard. There are no
+expense features yet. Screen designs for the planned app are in
+[docs/designs/v1](docs/designs/v1/README.md).
 
 ## Layout
 
 | Path | Contents |
 | --- | --- |
-| `apps/api` | Fastify API, Drizzle schema (`src/db/schema.ts`) and SQL migrations (`drizzle/`) |
+| `apps/api` | Fastify API, sign-in with Better Auth, Drizzle schema (`src/db/schema.ts`) and SQL migrations (`drizzle/`) |
 | `apps/web` | React single-page app built with Vite, served by nginx in Docker |
 | `packages/shared` | Zod schemas and the TypeScript types inferred from them, used by both apps |
 | `docker-compose.yml` | `db`, `migrate`, `api` and `web` services |
-
-The `accounts` table is a placeholder that proves migrations run. It is not the real data model.
 
 ## Requirements
 
@@ -32,7 +30,8 @@ cp .env.example .env
 docker compose up --build
 ```
 
-Open http://localhost:8080. The page shows the API and database status.
+Open <http://localhost:8080>. It sends you to the sign-in page. Sign-up is closed until you open
+it, so create the first account as described below.
 
 Startup order: `db` becomes healthy, `migrate` applies pending migrations and exits with
 code 0, then `api` starts, then `web`. nginx in `web` serves the app and proxies `/api/*` to
@@ -44,6 +43,52 @@ docker compose ps -a                     # migrate shows "Exited (0)"
 docker compose logs -f api
 docker compose down                      # stop; add -v to also delete the database volume
 ```
+
+## Accounts and sign-in
+
+Users sign in with an email and a password of 12 to 128 characters. Users and sessions are kept
+in the project's own Postgres. A session lasts 7 days and is extended while the app is in use.
+
+### Create the first account
+
+Sign-up is closed by default, so strangers cannot create accounts on a server they can reach.
+
+1. In `.env`, set `AUTH_SIGNUP_ENABLED=true`, then run `docker compose up -d api`.
+   (`docker compose restart` does not reread `.env`.)
+2. Open the app, choose **Create an account**, and sign up. You are signed in straight away.
+3. Set `AUTH_SIGNUP_ENABLED=false` again and run `docker compose up -d api`.
+
+Do the same whenever someone else needs an account.
+
+### Open the app at its configured address
+
+`APP_URL` must be the address exactly as people type it in the browser: scheme, host and port.
+Compose sets it to `http://localhost:${WEB_PORT}`. Any other address is refused, and the sign-in
+page says to check `APP_URL`. `http://127.0.0.1:8080` and a LAN address such as
+`http://192.168.1.20:8080` are different addresses from `http://localhost:8080`.
+
+Session cookies are marked `Secure` only when `APP_URL` starts with `https://`, so the app also
+works over plain HTTP inside your own network.
+
+### Forgotten password
+
+There is no outgoing email yet, so there is no reset link. Someone with shell access to the
+server sets a new password instead. It also signs the user out everywhere.
+
+```sh
+docker compose exec api node dist/reset-password.js sam@example.com
+```
+
+The command asks for the new password twice and does not show it. It never takes the password
+as an argument, because arguments end up in shell history. Outside Docker, run
+`pnpm user:reset-password sam@example.com`.
+
+### Behind another proxy
+
+The API limits sign-in attempts per address, using the `X-Real-IP` header that nginx sets. If you
+put another proxy in front of nginx, every user then shares that proxy's address and one limit.
+Configure nginx's `real_ip` settings to trust your proxy. Limits are kept in memory, so they reset
+when the API restarts.
 
 ## Environment variables
 
@@ -72,22 +117,37 @@ comment. Never commit `.env`.
 
 ```sh
 pnpm install
-pnpm test         # Vitest, API and web app
+pnpm test         # Vitest, every package
 pnpm typecheck    # TypeScript strict mode, every package
 pnpm build
 ```
 
-The tests need no database: the API tests replace the database check.
+The tests need no database: the API tests run Better Auth on its in-memory adapter.
 
 ## Database migrations
 
 1. Change `apps/api/src/db/schema.ts`.
 2. Run `pnpm db:generate`. drizzle-kit writes a new SQL file to `apps/api/drizzle/`.
-3. Commit the SQL file. The `migrate` service applies it on the next `docker compose up`.
+3. Commit the SQL file with `apps/api/drizzle/meta/`. The `migrate` service applies it on the
+   next `docker compose up`.
+
+If a change both drops a table and adds one, make it in two runs (drop, generate, then add,
+generate). In one run drizzle-kit asks whether the table was renamed, and without a terminal that
+question fails while drizzle-kit still exits with code 0. Check that the new SQL file exists.
+
+The sign-in tables (`users`, `sessions`, `auth_accounts`, `verifications`) are generated from
+Better Auth's options in `apps/api/src/auth.ts`:
+
+```sh
+pnpm auth:generate   # rewrites apps/api/src/db/auth-schema.ts; then run pnpm db:generate
+pnpm auth:check      # after a Better Auth upgrade: fails if the tables are missing anything
+```
 
 ## Develop without Docker
 
-Run Postgres 17 yourself, set `DATABASE_URL` (and optionally `API_HOST=127.0.0.1`) in `.env`, then:
+Run Postgres 17 yourself. In `.env`, set `DATABASE_URL`, `AUTH_SECRET`,
+`APP_URL=http://localhost:5173`, and `AUTH_SIGNUP_ENABLED=true` if you need to create an account
+(optionally also `API_HOST=127.0.0.1`). Then:
 
 ```sh
 pnpm db:migrate
@@ -99,9 +159,9 @@ Both read `.env` from the repository root and load `packages/shared` from its Ty
 
 ## Versions
 
-Node.js 26 LTS, PostgreSQL 17, Fastify 5.12, Drizzle ORM 0.45, Zod 4, React 19, Vite 8,
-TanStack Query 5, Vitest 5, TypeScript 7. Exact versions are pinned once, in the `catalog`
-of `pnpm-workspace.yaml`.
+Node.js 26 LTS, PostgreSQL 17, Fastify 5.12, Better Auth 1.7, Drizzle ORM 0.45, Zod 4, React 19,
+React Router 8, Vite 8, TanStack Query 5, Vitest 5, TypeScript 7. Exact versions are pinned
+once, in the `catalog` of `pnpm-workspace.yaml`.
 
 ## License
 

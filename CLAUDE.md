@@ -1,8 +1,8 @@
 # CLAUDE.md
 
-exTracker is an open-source, multi-user personal expense tracker (AGPL-3.0-only). It is a
-skeleton for now: a health check runs end to end (Postgres → Fastify API → React app), and
-there are no expense features yet. [README.md](README.md) covers running the stack, every
+exTracker is an open-source, multi-user personal expense tracker (AGPL-3.0-only). So far people
+can sign up, sign in and out (Better Auth, sessions in Postgres), and see an empty dashboard.
+There are no expense features yet. [README.md](README.md) covers running the stack, every
 environment variable and the migration steps. This file covers what you need to change the code.
 
 ## Commands
@@ -17,9 +17,12 @@ pnpm typecheck                                        # tsc -b, every package
 pnpm build
 pnpm --filter @extracker/api test test/health.test.ts # one test file
 pnpm --filter @extracker/web test -t "rejects other"  # tests whose name matches
-pnpm dev:api                                          # needs Postgres 17 and DATABASE_URL in .env
+pnpm dev:api                                          # needs Postgres 17, and DATABASE_URL, AUTH_SECRET, APP_URL in .env
 pnpm dev:web                                          # http://localhost:5173, proxies /api to the API
 pnpm db:generate                                      # after changing apps/api/src/db/schema.ts
+pnpm auth:generate                                    # after changing Better Auth's options; then db:generate
+pnpm auth:check                                       # after upgrading Better Auth
+pnpm user:reset-password <email>                      # set a user's password, end their sessions
 docker compose up --build                             # full stack on http://localhost:8080
 ```
 
@@ -27,8 +30,8 @@ docker compose up --build                             # full stack on http://loc
 
 | Path | Contents |
 | --- | --- |
-| `apps/api` | Fastify 5 API, Drizzle ORM schema and SQL migrations (`drizzle/`) |
-| `apps/web` | React 19 app with Vite 8 and TanStack Query 5. nginx serves it in Docker |
+| `apps/api` | Fastify 5 API, Better Auth 1.7, Drizzle ORM schema and SQL migrations (`drizzle/`) |
+| `apps/web` | React 19 app with Vite 8, React Router 8 and TanStack Query 5. nginx serves it in Docker |
 | `packages/shared` | Zod 4 schemas and the types inferred from them, used by both apps |
 | `docs/designs/v1` | Clickable HTML screen designs. Not built or shipped |
 
@@ -50,20 +53,48 @@ docker compose up --build                             # full stack on http://loc
   - use `import type` for imports that are only types;
   - write relative imports with the `.ts` extension. The build rewrites them to `.js`.
 - **The API gets its outside services as arguments.** `buildApp(dependencies, options)` in
-  `apps/api/src/app.ts` takes them (today only `checkDatabase`), and `server.ts` passes the
-  real ones. Tests pass fakes and call `app.inject()`, which is why no test needs Postgres.
-  Follow this for new routes and services.
+  `apps/api/src/app.ts` takes them (`checkDatabase`, `auth` and the `config` it needs), and
+  `server.ts` passes the real ones. Tests pass fakes and call `app.inject()`, which is why no
+  test needs Postgres. Follow this for new routes and services.
+- **Better Auth is built by `createAuth({ database, config })`** in `apps/api/src/auth.ts`. The
+  server and the reset command use `createDatabaseAuth()` (Drizzle on Postgres). Tests use
+  `buildTestApp()` in `apps/api/test/support.ts`, which passes Better Auth's memory adapter.
+  Better Auth turns its own origin check off when it detects a test run; `createAuth` sets
+  `disableOriginCheck: false` so the tests check what production does. Keep it.
+- **Protected routes use `{ preHandler: app.requireSession }`** (`apps/api/src/session.ts`), then
+  `signedInUser(request)` for the user. It answers 401 without a session, passes on the cookie
+  Better Auth sends when it extends a session, and refuses any write (not `GET`, `HEAD` or
+  `OPTIONS`) whose `Origin` is not `APP_URL` with `403 INVALID_ORIGIN`. Scripts such as `curl`
+  must send `Origin` on writes.
+- **Errors are `{ code, message }`** (`apiErrorSchema` in shared), the shape Better Auth uses, so
+  the web app reads every error one way. The error and not-found handlers in `app.ts` keep
+  Fastify's own errors in that shape too.
 - **Configuration.** The Zod schema in `apps/api/src/config.ts` parses every API environment
   variable. Nothing else in the API reads `process.env`. A new variable goes in four places:
   `config.ts`, `.env.example` (with a comment), `docker-compose.yml` and the table in README.md.
 - **Migrations.** Change `apps/api/src/db/schema.ts`, run `pnpm db:generate`, and commit the
   new SQL file together with `drizzle/meta/`. Never edit a migration that has already been
-  applied. In Compose, the one-shot `migrate` service applies them before `api` starts. The
-  `accounts` table only proves that migrations run; it is not the real data model.
+  applied. In Compose, the one-shot `migrate` service applies them before `api` starts.
+  - A change that drops one table and adds another needs two runs: drop and generate, then add
+    and generate. In one run drizzle-kit asks whether the table was renamed; without a terminal
+    that question fails and drizzle-kit still exits 0. Check that the SQL file exists.
+  - The auth tables (`users`, `sessions`, `auth_accounts`, `verifications`) live in
+    `src/db/auth-schema.ts`, which `pnpm auth:generate` writes from the options in
+    `src/auth.ts` (read through `apps/api/auth.cli.ts`). Never edit it by hand. Both auth scripts
+    build shared first, because the CLI ignores the `@extracker/source` condition.
+  - Money accounts will need the name `accounts`; Better Auth's sign-in methods are `auth_accounts`.
 - **Web tests run in Node, without jsdom.** Components are checked with
   `renderToStaticMarkup`, and functions that call the network take a `fetchImpl` argument.
   Keep fetching out of components (`health.ts` fetches, `HealthStatus.tsx` only renders) so
-  both stay testable this way.
+  both stay testable this way. Pages with hooks export a props-only view for the tests
+  (`LoginPage` and `LoginView`), and `AuthGate` has no hooks so tests can call it directly.
+- **Signed-in pages go inside the `RequireUser` route** in `apps/web/src/App.tsx`, and read the
+  user with `useCurrentUser()`. `RequireUser` asks `GET /api/me`: a 401 sends people to
+  `/login?next=<path>`, and any other failure shows a Retry screen without signing them out.
+- **The browser enforces a strict Content-Security-Policy** (`apps/web/nginx/security-headers.conf`):
+  only same-origin scripts, styles and fonts, and no inline `<style>`, `style="…"` in HTML, or
+  `eval`. Put styles in `apps/web/src/styles/`. `src/zod-config.ts` must stay the first import of
+  `main.tsx`, or Zod's `new Function` check logs a CSP error.
 - **Every API route lives under `/api`.** nginx (Docker) and the Vite dev server pass `/api/*`
   through unchanged, so the browser's `/api/health` is the API's `GET /api/health`. Never strip
   the prefix in a proxy: Better Auth builds its links from `APP_URL` and `/api/auth`. Only the
@@ -92,6 +123,8 @@ Accounts, Records, Budgets, Analytics, Settings) and the Add record form. Open
 `dashboard.html` in a browser. Build the app's colors from the tokens in `theme.css`, and
 follow the color rules in that folder's README.md: each category keeps its color in every
 chart, red is only for over the limit and for deleting, and category colors are always labelled.
+The app has copies of `theme.css` and the parts of `components.css` it uses, in
+`apps/web/src/styles/`. Copy more from the designs unchanged as screens need them.
 
 An earlier design draft is in git history (`git show fbbd1c3:design_draft.md`). Parts of it no
 longer match the code (it planned hosting on Supabase), so check with the user before
