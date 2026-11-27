@@ -6,7 +6,7 @@ import { createDatabase } from './db/client.ts';
 const config = loadConfig();
 const database = createDatabase(config.DATABASE_URL);
 const auth = createDatabaseAuth(database, config);
-const app = buildApp({ checkDatabase: database.check }, { logger: { level: config.LOG_LEVEL } });
+const app = buildApp({ checkDatabase: database.check, auth, config }, { logger: { level: config.LOG_LEVEL } });
 
 database.pool.on('error', (error) => app.log.error({ err: error }, 'idle database connection failed'));
 app.addHook('onClose', async () => {
