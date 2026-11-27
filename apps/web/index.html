@@ -1,17 +1,11 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="ex ex-light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="color-scheme" content="light dark" />
+    <!-- Light only until Settings can switch themes. Styles live in src/styles: the CSP refuses inline ones. -->
+    <meta name="color-scheme" content="light" />
     <title>exTracker</title>
-    <style>
-      body { margin: 0; font-family: system-ui, sans-serif; line-height: 1.5; }
-      main { max-width: 40rem; margin: 0 auto; padding: 2rem 1rem; }
-      dl { display: grid; grid-template-columns: max-content 1fr; gap: 0.25rem 1rem; }
-      dt { font-weight: 600; }
-      dd { margin: 0; }
-    </style>
   </head>
   <body>
     <div id="root"></div>

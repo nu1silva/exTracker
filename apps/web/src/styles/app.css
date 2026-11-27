@@ -1,0 +1,49 @@
+/* App parts the v1 designs draw with inline styles, or do not draw at all (sign-in, sign-up).
+   They are classes here because the Content-Security-Policy refuses inline styles. Colors come
+   from theme.css. Red is only for over the limit and for deleting, so errors here are not red. */
+
+.ex { min-height: 100vh; }
+
+/* Header, from parts/app-nav.js */
+.ex .app-header { border-bottom: 1px solid var(--line); }
+.ex .brand { display: flex; align-items: center; gap: 10px; min-height: 48px; }
+.ex .brand-name { font-size: 18px; font-weight: 700; font-stretch: 110%; letter-spacing: -0.01em; }
+.ex .account { display: flex; align-items: center; gap: 14px; margin-left: auto; }
+.ex .avatar { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; border-radius: 50%; border: 1px solid var(--line-2); background: transparent; font-size: 13px; font-weight: 650; anchor-name: --account-button; }
+.ex .avatar:hover { background: var(--raised); }
+
+/* The account menu is a native popover: it closes on Escape and on a click outside. */
+.ex .account-menu { position: absolute; inset: auto; top: 76px; right: max(var(--gutter), calc((100vw - 1440px) / 2 + var(--gutter))); width: min(300px, calc(100vw - 2 * var(--gutter))); margin: 0; padding: 16px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); color: var(--text); box-shadow: 0 12px 32px rgb(16 27 45 / 0.16); }
+@supports (position-anchor: --a) {
+  .ex .account-menu { position-anchor: --account-button; top: calc(anchor(bottom) + 8px); right: anchor(right); }
+}
+.ex .account-menu-who { display: flex; flex-direction: column; gap: 2px; margin: 0 0 14px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+.ex .account-menu-name { font-weight: 650; }
+.ex .account-menu .btn { width: 100%; }
+.ex .account-menu .form-error { margin-top: 12px; }
+
+/* Sign-in and sign-up */
+.ex .auth-page { display: grid; place-items: center; min-height: 100vh; padding: 32px var(--gutter); }
+.ex .auth-card { display: flex; flex-direction: column; gap: 20px; width: min(420px, 100%); }
+.ex .auth-card form { display: flex; flex-direction: column; gap: 16px; }
+.ex .auth-card .btn-primary { width: 100%; }
+.ex .auth-card .hint { font-size: 12.5px; font-weight: 450; color: var(--text-3); }
+.ex .auth-switch { margin: 0; color: var(--text-2); text-align: center; }
+.ex .text-link { color: var(--brand); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.ex .text-link:hover { color: var(--brand-hover); }
+.ex .form-error { margin: 0; padding: 10px 12px; border-radius: 10px; border-left: 4px solid var(--text-2); background: var(--raised); color: var(--text); font-weight: 550; }
+.ex .form-error:empty { display: none; }
+
+/* Dashboard */
+.ex .welcome { display: flex; flex-direction: column; gap: 8px; }
+.ex .welcome p { margin: 0; }
+.ex .status-card { display: flex; flex-direction: column; gap: 12px; max-width: 420px; }
+.ex .status-card dl { display: grid; grid-template-columns: max-content 1fr; gap: 4px 16px; margin: 0; }
+.ex .status-card dt { font-weight: 600; }
+.ex .status-card dd { margin: 0; color: var(--text-2); }
+.ex .status-card p { margin: 0; }
+
+/* Loading and "cannot reach" screens */
+.ex .gate { display: grid; place-items: center; min-height: 100vh; padding: 32px var(--gutter); text-align: center; }
+.ex .gate-box { display: flex; flex-direction: column; align-items: center; gap: 14px; max-width: 420px; }
+.ex .gate-box p { margin: 0; }

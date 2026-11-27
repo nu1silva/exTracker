@@ -1,0 +1,108 @@
+/* exTracker theme: Harbor. Copied from docs/designs/v1/theme.css; keep the two in step.
+   .ex alone is dark; .ex with .ex-light is light, the app's default. */
+
+.ex {
+  --ground: #0E1522;
+  --surface: #151E2E;
+  --raised: #1D283B;
+  --track: #29364B;
+  --line: #29364B;
+  --line-2: #5A6D8C;
+  --field: #0E1522;
+
+  --text: #EEF2F8;
+  --text-2: #B5C1D4;
+  --text-3: #90A0B8;
+
+  --brand: #7DB1FF;
+  --on-brand: #0B1626;
+  --brand-hover: #9BC3FF;
+  --tab: #7DB1FF;
+  --mark: #7DB1FF;
+  --on-mark: #0B1626;
+
+  /* Overview panel */
+  --hero: #1D4F9E;
+  --on-hero: #FFFFFF;
+  --on-hero-2: #D3E2F8;
+  --hero-line: #3D69AE;
+  --hero-band: #2C5FB0;
+  --hero-mute: #B4CCEE;
+
+  /* Money in, money out, this period, earlier period */
+  --in: #6AA6F8;
+  --out: #7F8FA6;
+  --now: #7DB1FF;
+  --prev: #7F8FA6;
+
+  /* Categories: fixed order, checked for colour-blind separation between neighbours */
+  --cat-housing: #9085E9;
+  --cat-food: #D95926;
+  --cat-shopping: #199E70;
+  --cat-transport: #C98500;
+  --cat-health: #D55181;
+  --cat-leisure: #5F9A1F;
+  --cat-other: #7F8FA6;
+
+  --over: #E5534B;
+  --over-text: #FF9A8F;
+  --ok-text: #6FD3A8;
+  --focus: #7DB1FF;
+  --gutter: 40px;
+
+  color-scheme: dark;
+  background: var(--ground);
+  color: var(--text);
+  font-family: 'Archivo Variable', "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+
+.ex.ex-light {
+  --ground: #EEF2F8;
+  --surface: #FFFFFF;
+  --raised: #F1F5FA;
+  --track: #DBE4F0;
+  --line: #D5DFEB;
+  --line-2: #7E91AB;
+  --field: #FFFFFF;
+
+  --text: #101B2D;
+  --text-2: #41516A;
+  --text-3: #54657F;
+
+  --brand: #1D5FBF;
+  --on-brand: #FFFFFF;
+  --brand-hover: #174F9F;
+  --tab: #1D5FBF;
+  --mark: #12305F;
+  --on-mark: #FFFFFF;
+
+  --hero: #12305F;
+  --on-hero: #FFFFFF;
+  --on-hero-2: #C9D9F0;
+  --hero-line: #365482;
+  --hero-band: #234474;
+  --hero-mute: #93AED6;
+
+  --in: #1D5FBF;
+  --out: #62728A;
+  --now: #1D5FBF;
+  --prev: #7E91AB;
+
+  --cat-housing: #6250D6;
+  --cat-food: #EB6834;
+  --cat-shopping: #1BAF7A;
+  --cat-transport: #E09A00;
+  --cat-health: #D8568C;
+  --cat-leisure: #4D8600;
+  --cat-other: #62728A;
+
+  --over: #C9342B;
+  --over-text: #B3261E;
+  --ok-text: #0B6B45;
+  --focus: #1D5FBF;
+
+  color-scheme: light;
+}
