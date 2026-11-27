@@ -12,6 +12,9 @@ catalog:
   '@types/react': 19.3.3
   '@types/react-dom': 19.3.0
   '@vitejs/plugin-react': 6.3.0
+  # The Better Auth CLI. Keep it on the same version as better-auth.
+  auth: 1.7.28
+  better-auth: 1.7.28
   drizzle-kit: 0.31.11
   drizzle-orm: 0.45.4
   fastify: 5.12.8

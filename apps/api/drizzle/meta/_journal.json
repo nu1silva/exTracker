@@ -8,6 +8,20 @@
       "when": 1795776661587,
       "tag": "0000_narrow_marvel_apes",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1795784889402,
+      "tag": "0001_orange_mastermind",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1795784895208,
+      "tag": "0002_regular_the_professor",
+      "breakpoints": true
     }
   ]
 }

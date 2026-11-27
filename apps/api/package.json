@@ -15,10 +15,13 @@
     "dev": "node --watch --conditions=@extracker/source --env-file-if-exists=../../.env src/server.ts",
     "start": "node dist/server.js",
     "db:generate": "drizzle-kit generate",
+    "auth:generate": "pnpm --filter @extracker/shared build && auth generate --config auth.cli.ts --adapter drizzle --dialect postgresql --output src/db/auth-schema.ts --yes",
+    "auth:check": "pnpm --filter @extracker/shared build && auth check schema --config auth.cli.ts",
     "db:migrate": "node --conditions=@extracker/source --env-file-if-exists=../../.env src/migrate.ts"
   },
   "dependencies": {
     "@extracker/shared": "workspace:*",
+    "better-auth": "catalog:",
     "drizzle-orm": "catalog:",
     "fastify": "catalog:",
     "pg": "catalog:",
@@ -27,6 +30,7 @@
   "devDependencies": {
     "@types/node": "catalog:",
     "@types/pg": "catalog:",
+    "auth": "catalog:",
     "drizzle-kit": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",

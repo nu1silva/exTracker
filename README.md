@@ -62,8 +62,8 @@ comment. Never commit `.env`.
 | `APP_URL` | `http://localhost:${WEB_PORT}` in Compose. Required outside it | api | Public address of the web app, exactly as people type it in the browser. Scheme, host and port must all match, or every sign-in is refused. Use `http://localhost:5173` with `pnpm dev:web` |
 | `AUTH_SECRET` | none, required | api | Signs session cookies. At least 32 characters: `openssl rand -base64 32` |
 | `AUTH_SIGNUP_ENABLED` | `false` | api | `true` lets anyone who can open the app create an account |
-| `DEFAULT_CURRENCY` | `EUR` | api | Default currency for new users (ISO 4217). Not used until users exist |
-| `DEFAULT_LOCALE` | `en-IE` | api | Default locale for new users (BCP 47). Not used until users exist |
+| `DEFAULT_CURRENCY` | `EUR` | api | Base currency of every new user (ISO 4217) |
+| `DEFAULT_LOCALE` | `en-IE` | api | Locale of every new user (BCP 47) |
 | `WEB_PORT` | `8080` | web | Host port for the web app |
 | `API_UPSTREAM` | built by Compose | web | Where nginx sends `/api` requests |
 | `API_PROXY_TARGET` | `http://localhost:3000` | web dev server | Where `pnpm dev:web` sends `/api` requests |

@@ -1,9 +1,11 @@
 import { buildApp } from './app.ts';
+import { createDatabaseAuth } from './auth.ts';
 import { loadConfig } from './config.ts';
 import { createDatabase } from './db/client.ts';
 
 const config = loadConfig();
 const database = createDatabase(config.DATABASE_URL);
+const auth = createDatabaseAuth(database, config);
 const app = buildApp({ checkDatabase: database.check }, { logger: { level: config.LOG_LEVEL } });
 
 database.pool.on('error', (error) => app.log.error({ err: error }, 'idle database connection failed'));
@@ -25,6 +27,8 @@ for (const signal of ['SIGINT', 'SIGTERM'] as const) {
 }
 
 try {
+  // Better Auth sets itself up in the background. Wait for it, so a bad option fails here.
+  await auth.$context;
   await app.listen({ host: config.API_HOST, port: config.API_PORT });
 } catch (error) {
   app.log.fatal({ err: error }, 'API failed to start');
