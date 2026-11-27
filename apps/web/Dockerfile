@@ -14,5 +14,6 @@ RUN pnpm --filter @extracker/web build
 
 FROM nginx:1.30-alpine AS web
 COPY apps/web/nginx/default.conf.template /etc/nginx/templates/default.conf.template
+COPY apps/web/nginx/security-headers.conf /etc/nginx/snippets/security-headers.conf
 COPY --from=build /repo/apps/web/dist /usr/share/nginx/html
 EXPOSE 80

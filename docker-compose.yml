@@ -42,6 +42,9 @@ services:
       DATABASE_URL: *database-url
       API_PORT: ${API_PORT:-3000}
       LOG_LEVEL: ${LOG_LEVEL:-info}
+      APP_URL: ${APP_URL:-http://localhost:${WEB_PORT:-8080}}
+      AUTH_SECRET: ${AUTH_SECRET:?Set AUTH_SECRET in .env}
+      AUTH_SIGNUP_ENABLED: ${AUTH_SIGNUP_ENABLED:-false}
       DEFAULT_CURRENCY: ${DEFAULT_CURRENCY:-EUR}
       DEFAULT_LOCALE: ${DEFAULT_LOCALE:-en-IE}
     depends_on:
@@ -50,7 +53,7 @@ services:
       migrate:
         condition: service_completed_successfully
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO /dev/null http://127.0.0.1:$${API_PORT}/health || exit 1"]
+      test: ["CMD-SHELL", "wget -qO /dev/null http://127.0.0.1:$${API_PORT}/api/health || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 5

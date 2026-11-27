@@ -1,8 +1,5 @@
-import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+// Every table, for drizzle-kit and the Drizzle client.
 
-/** Placeholder that proves migrations run. Not the real data model. */
-export const accounts = pgTable('accounts', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  name: text('name').notNull(),
-  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-});
+// Users, sessions and sign-in methods, owned by Better Auth. `pnpm auth:generate` rewrites
+// auth-schema.ts from the options in src/auth.ts, so never edit that file by hand.
+export * from './auth-schema.ts';

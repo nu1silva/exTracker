@@ -1,19 +1,19 @@
-import { useQuery } from '@tanstack/react-query';
-import { fetchHealth, healthQueryKey } from './health.ts';
-import { HealthStatus } from './HealthStatus.tsx';
+import { Navigate, Route, Routes } from 'react-router';
+import { DashboardPage } from './DashboardPage.tsx';
+import { LoginPage } from './LoginPage.tsx';
+import { RequireUser } from './RequireUser.tsx';
+import { SignupPage } from './SignupPage.tsx';
 
 export function App() {
-  const health = useQuery({
-    queryKey: healthQueryKey,
-    queryFn: ({ signal }) => fetchHealth(signal),
-    refetchInterval: 15_000,
-  });
-
   return (
-    <main>
-      <h1>exTracker</h1>
-      <h2>System health</h2>
-      <HealthStatus isPending={health.isPending} error={health.error} data={health.data} />
-    </main>
+    <Routes>
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/signup" element={<SignupPage />} />
+      <Route element={<RequireUser />}>
+        <Route index element={<DashboardPage />} />
+      </Route>
+      {/* No other pages yet. Signed-out people then go on to sign in. */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 }

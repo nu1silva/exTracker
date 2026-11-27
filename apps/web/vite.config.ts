@@ -15,12 +15,10 @@ export default defineConfig(({ mode }) => {
     resolve: { conditions: [sourceCondition, ...defaultClientConditions] },
     ssr: { resolve: { conditions: [sourceCondition, ...defaultServerConditions] } },
     server: {
-      // Development only. In Docker, nginx proxies /api to the API service.
+      // Development only. In Docker, nginx proxies /api to the API service. Paths pass through
+      // unchanged, because the API serves everything under /api.
       proxy: {
-        '/api': {
-          target: env.API_PROXY_TARGET || 'http://localhost:3000',
-          rewrite: (path) => path.replace(/^\/api/, ''),
-        },
+        '/api': { target: env.API_PROXY_TARGET || 'http://localhost:3000' },
       },
     },
     test: {

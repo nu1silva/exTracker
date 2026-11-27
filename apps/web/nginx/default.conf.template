@@ -7,11 +7,17 @@ server {
     root /usr/share/nginx/html;
     index index.html;
 
-    # /api/health is sent to the API as /health.
+    include /etc/nginx/snippets/security-headers.conf;
+
+    # No path after the upstream, so the request path reaches the API unchanged (/api/...).
     location /api/ {
-        proxy_pass ${API_UPSTREAM}/;
+        proxy_pass ${API_UPSTREAM};
         proxy_http_version 1.1;
+        # Inside the Compose network a connection takes milliseconds. When the API is down, fail
+        # fast so the app can say so, instead of waiting nginx's default 60 seconds.
+        proxy_connect_timeout 3s;
         proxy_set_header Host $host;
+        # Better Auth rate-limits by this address. Clients can forge X-Forwarded-For, not this.
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
@@ -20,12 +26,14 @@ server {
     # Vite puts a content hash in every asset file name.
     location /assets/ {
         try_files $uri =404;
+        include /etc/nginx/snippets/security-headers.conf;
         add_header Cache-Control "public, max-age=31536000, immutable";
     }
 
     # Single-page app: unknown paths get index.html.
     location / {
         try_files $uri $uri/ /index.html;
+        include /etc/nginx/snippets/security-headers.conf;
         add_header Cache-Control "no-cache";
     }
 }
