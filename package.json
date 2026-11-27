@@ -16,6 +16,7 @@
     "db:generate": "pnpm --filter @extracker/api db:generate",
     "db:migrate": "pnpm --filter @extracker/api db:migrate",
     "auth:generate": "pnpm --filter @extracker/api auth:generate",
-    "auth:check": "pnpm --filter @extracker/api auth:check"
+    "auth:check": "pnpm --filter @extracker/api auth:check",
+    "user:reset-password": "pnpm --filter @extracker/api user:reset-password"
   }
 }

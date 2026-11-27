@@ -17,7 +17,8 @@
     "db:generate": "drizzle-kit generate",
     "auth:generate": "pnpm --filter @extracker/shared build && auth generate --config auth.cli.ts --adapter drizzle --dialect postgresql --output src/db/auth-schema.ts --yes",
     "auth:check": "pnpm --filter @extracker/shared build && auth check schema --config auth.cli.ts",
-    "db:migrate": "node --conditions=@extracker/source --env-file-if-exists=../../.env src/migrate.ts"
+    "db:migrate": "node --conditions=@extracker/source --env-file-if-exists=../../.env src/migrate.ts",
+    "user:reset-password": "node --conditions=@extracker/source --env-file-if-exists=../../.env src/reset-password.ts"
   },
   "dependencies": {
     "@extracker/shared": "workspace:*",
