@@ -1,10 +1,10 @@
 import { fileURLToPath } from 'node:url';
 import { migrate } from 'drizzle-orm/node-postgres/migrator';
-import { loadConfig } from './config.ts';
+import { loadMigrateConfig } from './config.ts';
 import { createDatabase } from './db/client.ts';
 
 // Applies the SQL files in apps/api/drizzle that have not run yet, then exits.
-const { DATABASE_URL } = loadConfig();
+const { DATABASE_URL } = loadMigrateConfig();
 const database = createDatabase(DATABASE_URL);
 const migrationsFolder = fileURLToPath(new URL('../drizzle', import.meta.url));
 

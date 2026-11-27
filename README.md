@@ -27,7 +27,8 @@ The `accounts` table is a placeholder that proves migrations run. It is not the 
 
 ```sh
 cp .env.example .env
-# Set POSTGRES_PASSWORD in .env, for example to the output of: openssl rand -hex 24
+# In .env, set POSTGRES_PASSWORD to the output of: openssl rand -hex 24
+# and AUTH_SECRET to the output of: openssl rand -base64 32
 docker compose up --build
 ```
 
@@ -58,6 +59,9 @@ comment. Never commit `.env`.
 | `API_HOST` | `0.0.0.0` | api | Address the API listens on |
 | `API_PORT` | `3000` | api, web | API port inside the Compose network |
 | `LOG_LEVEL` | `info` | api | `fatal`, `error`, `warn`, `info`, `debug`, `trace` or `silent` |
+| `APP_URL` | `http://localhost:${WEB_PORT}` in Compose. Required outside it | api | Public address of the web app, exactly as people type it in the browser. Scheme, host and port must all match, or every sign-in is refused. Use `http://localhost:5173` with `pnpm dev:web` |
+| `AUTH_SECRET` | none, required | api | Signs session cookies. At least 32 characters: `openssl rand -base64 32` |
+| `AUTH_SIGNUP_ENABLED` | `false` | api | `true` lets anyone who can open the app create an account |
 | `DEFAULT_CURRENCY` | `EUR` | api | Default currency for new users (ISO 4217). Not used until users exist |
 | `DEFAULT_LOCALE` | `en-IE` | api | Default locale for new users (BCP 47). Not used until users exist |
 | `WEB_PORT` | `8080` | web | Host port for the web app |
